@@ -1,6 +1,6 @@
 import sys
 sys.path.append("./")
-from src.tools.summerize import MapReduceSummerize
+from src.tools.summerize import MapReduceSummerizer, IterativeRefineSummerizer
 
 
 text_1 ='''
@@ -9,14 +9,14 @@ At 6:14 p.m., Daniel Kim across the hall drew the first note of a Bach cello sui
 '''
 
 def test_split_text():
-    summerize = MapReduceSummerize(text_1)
+    summerize = MapReduceSummerizer(text_1)
 
     chunks = summerize.get_documents()
 
     assert len(chunks) == 2
 
-def test_map():
-    summerizer = MapReduceSummerize(text_1)
+def test_map_reduce_decomposed():
+    summerizer = MapReduceSummerizer(text_1)
     mapping = summerizer.map()
 
     assert len(mapping) == len(summerizer.get_documents())
@@ -24,3 +24,15 @@ def test_map():
     final_summary = summerizer.reduce(mapping)
 
     print(final_summary)
+
+
+def test_refine_summary_1():
+    summerizer = IterativeRefineSummerizer.from_recursive_splitter(text_1)
+
+    summary = summerizer.run()
+
+    print(summary)
+
+
+
+
