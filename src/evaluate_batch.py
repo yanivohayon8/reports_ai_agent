@@ -56,7 +56,7 @@ def main():
             questions_file=args.questions,
             answers_out=args.answers_out,
             gt_source=gt_source,
-            metrics=[m.strip() for m in args.qa_metrics.split(",") if m.strip()],
+            # metrics=[m.strip() for m in args.qa_metrics.split(",") if m.strip()],
         )
         print("QnA scores →", qa_scores)
 

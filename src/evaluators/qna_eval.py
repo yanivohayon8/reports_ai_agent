@@ -72,7 +72,7 @@ class QnaEvaluator:
           * Path to CSV with columns: question, ground_truth
           * a single string (full document) used for all questions
         """
-        metrics = metrics or ["context_precision", "context_recall", "faithfulness"]
+        metrics = metrics or ["context_precision", "context_recall", "faithfulness", "answer_correctness"]
         metric_fns = [RAGAS_METRICS_MAP[m] for m in metrics]
 
         # ---------------- Execute QnA ----------------
@@ -80,7 +80,12 @@ class QnaEvaluator:
         rows, ctxs, answers = [], [], []
         for q in questions:
             res = self.qna.run(q)
-            answer = res["answer"]
+            
+            if isinstance(res, dict):
+                answer=res["answer"]
+            else:
+                answer = res # assuming str
+            
             raw_docs = self.retriever.get_relevant_documents(q)
             retrieved = [d.page_content for d in raw_docs]
 

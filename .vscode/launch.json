@@ -9,7 +9,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/src/evaluate_batch.py",
-            "args": ["C:\\Users\\HP\\Documents\\Mid_Curse_Ex\\data\\report.pdf","--gt", "C:\\Users\\HP\\Documents\\Mid_Curse_Ex\\data\\gt.csv"],
+            "args": ["data/report.pdf","--gt", "src/questions_answers.csv","--questions", "data/questions_answers.csv","--answers-out","answers_res_y.csv"],
             "console": "integratedTerminal"
         },
         {
@@ -17,7 +17,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/src/tools/tools_project/cli_timeline.py",
-            "args": ["C:\\Users\\HP\\Documents\\Mid_Curse_Ex\\data\\report.pdf", "--method", "map_reduce", "--token-based"],
+            "args": ["data/report.pdf", "--method", "map_reduce", "--token-based"],
             "console": "integratedTerminal"
         },
         {
@@ -25,7 +25,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/src/tools/tools_project/cli_agent.py",
-            "args": ["C:\\Users\\HP\\Documents\\Mid_Curse_Ex\\data\\report.pdf", "--chat"],
+            "args": ["data/report.pdf", "--chat"],
             "console": "integratedTerminal"
         },
         {
@@ -33,7 +33,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/src/tools/tools_project/qna/qna_core.py",
-            "args": ["--question", "How did Marcus Boyd gain entry into Emma’s apartment?", "C:\\Users\\HP\\Documents\\Mid_Curse_Ex\\data\\report.pdf"],
+            "args": ["--question", "How did Marcus Boyd gain entry into Emma’s apartment?", "data/report.pdf"],
             "console": "integratedTerminal"
         }
     ]

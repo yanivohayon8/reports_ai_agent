@@ -26,6 +26,10 @@ from src.tools.tools_project.qna.qna_prompts import qa_prompt, multiquery_prompt
 from dotenv import load_dotenv
 load_dotenv()
 
+from pypdf import PdfReader
+
+import os 
+
 try:
     import tiktoken
 except ImportError:  # optional
@@ -83,7 +87,9 @@ class QnATool:
     return_sources: bool = False 
 
     def run(self, question: str):
-        res = self.qa_chain({"query": question})
+        # Suppress OpenMP runtime error but could make instability,crashed and wrong errors
+        os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE" 
+        res = self.qa_chain.invoke({"query": question})
         if self.return_sources:
             print("--------------------------------")
             print(res.get("source_documents", []))
@@ -208,7 +214,7 @@ if __name__ == "__main__":
         if ext == ".txt":
             return Path(p).read_text(encoding="utf-8")
         elif ext == ".pdf":
-            from pypdf import PdfReader
+            
             reader = PdfReader(p)
             return "\n".join(page.extract_text() or "" for page in reader.pages)
         else:
