@@ -1,0 +1,40 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "evaluate_batch.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/evaluate_batch.py",
+            "args": ["C:\\Users\\HP\\Documents\\Mid_Curse_Ex\\data\\report.pdf","--gt", "C:\\Users\\HP\\Documents\\Mid_Curse_Ex\\data\\gt.csv"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "cli_timeline.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/tools/tools_project/cli_timeline.py",
+            "args": ["C:\\Users\\HP\\Documents\\Mid_Curse_Ex\\data\\report.pdf", "--method", "map_reduce", "--token-based"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "cli_agent.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/tools/tools_project/cli_agent.py",
+            "args": ["C:\\Users\\HP\\Documents\\Mid_Curse_Ex\\data\\report.pdf", "--chat"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "qna_core.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/tools/tools_project/qna/qna_core.py",
+            "args": ["--question", "How did Marcus Boyd gain entry into Emma’s apartment?", "C:\\Users\\HP\\Documents\\Mid_Curse_Ex\\data\\report.pdf"],
+            "console": "integratedTerminal"
+        }
+    ]
+}

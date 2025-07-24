@@ -1,0 +1,11 @@
+pandas
+ragas
+datasets
+dotenv
+langchain-openai
+langchain-community
+PyPDF2
+evaluate
+bert_score  # Required for BERTScore metric
+# Optional: tiktoken (for token counting, improves chunking accuracy)
+tiktoken 
