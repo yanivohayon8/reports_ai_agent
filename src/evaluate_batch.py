@@ -32,6 +32,8 @@ def parse_args():
 
     p.add_argument("--model", default="gpt-4o-mini")
     p.add_argument("--temperature", type=float, default=0.0)
+
+    p.add_argument("--qna-ask-llm-first", action="store_true")
     return p.parse_args()
 
 
@@ -45,6 +47,23 @@ def main():
 
     # Fallback GT text (single big text) if no per-question CSV
     fallback_gt = read_any(args.doc_gt) if args.doc_gt else read_any(args.doc)
+
+
+    if args.qna_ask_llm_first:
+        sum_eval = SummaryEvaluator(args.doc, model_name=args.model, temperature=args.temperature)
+        summary_txt = sum_eval.generate()
+
+        qna_eval = QnaEvaluator(args.doc, model_name=args.model, temperature=args.temperature, top_k=args.top_k)
+        gt_source = args.gt if args.gt else fallback_gt
+
+        qa_scores = qna_eval.run_batch_llm_first(
+            doc_summary=summary_txt,
+            questions_file=args.questions,
+            answers_out=args.answers_out,
+            gt_source=gt_source,
+            # metrics=[m.strip() for m in args.qa_metrics.split(",") if m.strip()],
+        )
+        print("QnA scores →", qa_scores)
 
     if run_qna:
         qna_eval = QnaEvaluator(args.doc, model_name=args.model, temperature=args.temperature, top_k=args.top_k)

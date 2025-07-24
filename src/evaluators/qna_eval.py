@@ -22,7 +22,10 @@ from evaluators.core import (
 # Import the new builder
 from tools.tools_project.qna.qna_core import build_qna_tool 
 
+
 load_dotenv()
+
+from langchain_core.prompts import ChatPromptTemplate
 
 
 class QnaEvaluator:
@@ -144,3 +147,57 @@ class QnaEvaluator:
                 "ground_truth": ground_truths,
             }
         )
+    
+    def run_batch_llm_first(
+        self,
+        doc_summary:str,
+        questions_file: pathlib.Path,
+        answers_out: pathlib.Path,
+        gt_source: Union[str, pathlib.Path],
+        metrics: List[str] | None = None,
+    ) -> Dict[str, float] | Any:
+        """
+        gt_source: either
+          * Path to CSV with columns: question, ground_truth
+          * a single string (full document) used for all questions
+        """
+        metrics = metrics or ["context_precision", "context_recall", "faithfulness", "answer_correctness"]
+        metric_fns = [RAGAS_METRICS_MAP[m] for m in metrics]
+
+        # ---------------- Execute QnA ----------------
+        questions = load_questions(questions_file)
+        rows, ctxs, answers = [], [], []
+        for q in questions:
+            prompt_template = ChatPromptTemplate([
+                ("system","""You are a helpful assistant that can answer questions given the following document summary:\\n{doc_summary}"""),
+                ("user", """Question: {question}\\n Answer:""")])
+
+            prompt = prompt_template.invoke({"doc_summary":doc_summary,"question":q})
+            res = self.qna.run(prompt)
+            
+            if isinstance(res, dict):
+                answer=res["answer"]
+            else:
+                answer = res # assuming str
+            
+            raw_docs = self.retriever.get_relevant_documents(q)
+            retrieved = [d.page_content for d in raw_docs]
+
+            rows.append({"question": q, "answer": answer})
+            answers.append(answer)
+            ctxs.append(retrieved)
+
+            print(f"Question: {q}")
+            print(f"Answer: {answer}")
+            print(f"Contexts: {retrieved}")
+            print("-" * 100)
+
+        save_rows(answers_out, rows)
+
+        # ---------------- Ground Truth ----------------
+        gts = self._load_gt(gt_source, questions)
+
+        # ---------------- Evaluate ------------------
+        dataset: Dataset = self._build_ragas_dataset(questions, answers, ctxs, gts)
+        ragas_res = ragas_evaluate(dataset, metrics=metric_fns, raise_exceptions=False)
+        return ragas_res

@@ -5,6 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "evaluate_batch_llm_first.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/evaluate_batch.py",
+            "args": ["data/report.pdf","--qna-ask-llm-first","--gt", "src/questions_answers.csv","--questions", "data/questions_answers.csv","--answers-out","answers_res_y.csv"],
+            "console": "integratedTerminal"
+        },
+        {
             "name": "evaluate_batch.py",
             "type": "debugpy",
             "request": "launch",
