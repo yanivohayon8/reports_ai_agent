@@ -1,15 +1,14 @@
 import pathlib
 import pytest
 import sys
-import os
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(str(pathlib.Path(__file__).parent.parent))
 
-from src.pdf_reader import read_pdf
+from core.pdf_reader import read_pdf
 
 @pytest.fixture
 def pdf_path():
-    return pathlib.Path("tests/data/report.pdf")
+    return pathlib.Path("core/tests/data/report.pdf")
 
 def test_read_pdf(pdf_path):
     text = read_pdf(pdf_path)
