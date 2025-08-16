@@ -14,11 +14,16 @@ def test_insurance_report_map_reduce():
     summary_agent = SummaryAgent(text_splitter,llm)
     summary = summary_agent.summarize_single_pdf(pathlib.Path("pdfs/report.pdf"), "map_reduce")
     assert summary is not None
+    assert len(summary) > 0
 
 
 def test_insurance_report_iterative():
-    summary_agent = SummaryAgent()
-    summary = summary_agent.summarize_single_pdf(pathlib.Path("pdfs/report.pdf"), "iterative_refinement")
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=300,chunk_overlap=50)
+    llm = get_llm_langchain_openai(model="gpt-4o-mini")
+    summary_agent = SummaryAgent(text_splitter,llm)
+    summary = summary_agent.summarize_single_pdf(pathlib.Path("pdfs/report.pdf"), "iterative")
+
     assert summary is not None
+    assert len(summary) > 0
 
 

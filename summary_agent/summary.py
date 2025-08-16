@@ -2,6 +2,7 @@ import pathlib
 from core.pdf_reader import read_pdf
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from summary_agent.prompts import MAP_SUMMARY_PROMPT_CHAT_TEMPLATE,REDUCE_SUMMARY_PROMPT_CHAT_TEMPLATE
+from summary_agent.prompts import ITERATIVE_REFINEMENT_PROMPT_CHAT_TEMPLATE,ITERATIVE_REFINEMENT_INITIAL_SUMMARY_PROMPT_CHAT_TEMPLATE
 from langchain_core.language_models.chat_models import BaseChatModel
 
 class SummaryAgent:
@@ -46,7 +47,17 @@ class SummaryAgent:
         return response.content
     
     def _summarize_iterative_refinement(self,text:str):
-        raise NotImplementedError("Iterative refinement summary method not implemented")
+        chunks = self.text_splitter.split_text(text)
+        initial_summary_chain = ITERATIVE_REFINEMENT_INITIAL_SUMMARY_PROMPT_CHAT_TEMPLATE | self.llm
+        initial_summary = initial_summary_chain.invoke({"text":chunks[0]})
+        refinement_chain = ITERATIVE_REFINEMENT_PROMPT_CHAT_TEMPLATE | self.llm
+
+        for chunk in chunks[1:]:
+            response = refinement_chain.invoke({"summary":initial_summary,"text":chunk})
+            initial_summary = response.content
+        
+        return initial_summary
+
 
 
 
