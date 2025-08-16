@@ -5,6 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "summary_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/summary_agent/summary_cli.py",
+            "args": ["pdfs/report.pdf", "--method", "map_reduce", "--model", "gpt-4o-mini"],
+            "console": "integratedTerminal"
+        },
+        {
             "name": "indexer_cli.py",
             "type": "debugpy",
             "request": "launch",
