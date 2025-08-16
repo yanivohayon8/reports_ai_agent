@@ -5,9 +5,13 @@ from typing import List
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_community.docstore.in_memory import InMemoryDocstore
-from core.api_utils import get_openai_embeddings
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from core.api_utils import get_openai_embeddings
 from core.pdf_reader import read_pdf
 
 
@@ -39,10 +43,21 @@ class FAISSIndexer():
         self.embedding_model = embedding_model
         self.vector_store = None
 
-        if directory_path is not None and os.path.exists(directory_path):
+        if directory_path is not None and self._is_index_exists(directory_path):
             self._load_existing_index(directory_path)
         else:
             self._initialize_index()
+
+    def _is_index_exists(self,directory_path:str):
+        if not os.path.exists(directory_path):
+            return False
+        
+        for file in os.listdir(directory_path):
+            if file.endswith(".faiss"):
+                return True
+        
+        return False
+
 
     def _initialize_index(self):
         index = faiss.IndexFlatL2(len(self.embedding_model.embed_query("hello world")))
@@ -74,9 +89,6 @@ class FAISSIndexer():
 
 
 
-
-
-
 class TextChunker():
     @staticmethod
     def get_metadata_keys():
@@ -95,46 +107,46 @@ class TextChunker():
                 "CaseId" # if relevant
             ]
     
-    def __init__(self,text:str,faiss_indexer:FAISSIndexer,chunk_size:int,chunk_overlap:int):
-        self.text = text
+    def __init__(self,faiss_indexer:FAISSIndexer,chunk_size:int,chunk_overlap:int):
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
         self.faiss_indexer = faiss_indexer
-        
-    @classmethod
-    def from_pdf(cls,pdf_path:Path,faiss_indexer_directory:Path,chunk_size:int=300,chunk_overlap:int=50):
-        text = read_pdf(pdf_path)
-        faiss_indexer = FAISSIndexer.from_small_embedding(directory_path=faiss_indexer_directory)
-        return cls(text,faiss_indexer,chunk_size,chunk_overlap)
     
     def chunk(self,pdf_path:Path):
-        chunks = self._chunk_text()
+        pages = read_pdf(pdf_path,loader="PyPDFLoader")
+        chunks = self._chunk_text(pages)
+
+        chunks_doc_processed = []
 
         for chunk in chunks:
             metadata = {}
-            metadata["FileName"] = pdf_path.name
-            metadata["PageNumber"] = self._get_page_number(chunk)
+            metadata["FileName"] = chunk.metadata.get("source")
+            metadata["PageNumber"] = chunk.metadata.get("page")
             metadata["ChunkSummary"] = self._get_chunk_summary(chunk)
             metadata["Keywords"] = self._get_keywords(chunk)
             metadata["FigureId"] = self._get_figure_id(chunk)
 
-            self.faiss_indexer.add_documents([Document(page_content=chunk,metadata=metadata)])
-    
-    def _chunk_text(self):
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=self.chunk_size,chunk_overlap=self.chunk_overlap)
-        return text_splitter.split_text(self.text)
-    
-    def _get_file_name(self,pdf_path:Path):
-        return pdf_path.name
-    
-    def _get_page_number(self,chunk:str):
-        raise NotImplementedError("Not implemented")
-    
-    def _get_chunk_summary(self,chunk:str):
-        raise NotImplementedError("Not implemented")
-    
-    def _get_keywords(self,chunk:str):
-        raise NotImplementedError("Not implemented")
+            chunks_doc_processed.append(Document(page_content=chunk.page_content,metadata=metadata))
 
-    def _get_figure_id(self,chunk:str):
-        raise NotImplementedError("Not implemented")
+        self.faiss_indexer.add_documents(chunks_doc_processed)
+    
+    def _chunk_text(self,pages):
+        # TODO: Add a way to pass kwargs to the text splitter (e.g. length_function)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=self.chunk_size,
+                                                       chunk_overlap=self.chunk_overlap)
+        return text_splitter.split_documents(pages)
+    
+    def _get_chunk_summary(self,chunk:Document):
+        # TODO: Implement a way to get the chunk summary (call SummaryAgent Utility?)
+        return None
+    
+    def _get_keywords(self,chunk:Document):
+        # TODO: Implement a way to get the keywords
+        return None
+
+    def _get_figure_id(self,chunk:Document):
+        # TODO: Implement a way to get the figure id 
+        return None
+    
+    def save(self,faiss_indexer_directory:Path):
+        self.faiss_indexer.save(faiss_indexer_directory)

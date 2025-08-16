@@ -7,7 +7,7 @@ import sys
 
 sys.path.append(str(Path(__file__).parent.parent))
 
-from core.indexer import FAISSIndexer,TextChunker
+from indexer.indexer import FAISSIndexer,TextChunker
 
 def test_faiss_indexer():
     indexer = FAISSIndexer.from_small_embedding()
@@ -25,17 +25,10 @@ def test_faiss_indexer():
     shutil.rmtree(directory_path)
 
 
-def test_text_chunker():
-    text_chunker = TextChunker.from_pdf(Path("tests/data/report.pdf"),Path("tests","data","temp_faiss_index"))
-    chunks = text_chunker._chunk_text()
-    assert len(chunks) > 0
-    
-    print(chunks[0])
-
-
 def test_text_chunker_chunk():
-    pdf_path = Path("tests/data/report.pdf")
     faiss_indexer_directory = Path("tests","data","temp_faiss_index")
-    text_chunker = TextChunker.from_pdf(pdf_path,faiss_indexer_directory)
+    faiss_indexer = FAISSIndexer.from_small_embedding(directory_path=faiss_indexer_directory)
+    text_chunker = TextChunker(faiss_indexer,chunk_size=300,chunk_overlap=50)
 
+    pdf_path = Path("tests/data/report.pdf")
     text_chunker.chunk(pdf_path)

@@ -5,6 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "indexer_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/indexer/indexer_cli.py",
+            "args": ["--pdf-path", "pdfs/report.pdf", "--faiss-indexer-directory", "vectordb_indexes/faiss_indexer_report"],
+            "console": "integratedTerminal"
+        },
+        /// OLD CANNOT BE USED: 
+        {
             "name": "evaluate_batch_llm_first.py",
             "type": "debugpy",
             "request": "launch",
