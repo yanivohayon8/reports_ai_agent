@@ -107,9 +107,8 @@ class TextChunker():
                 "CaseId" # if relevant
             ]
     
-    def __init__(self,faiss_indexer:FAISSIndexer,chunk_size:int,chunk_overlap:int):
-        self.chunk_size = chunk_size
-        self.chunk_overlap = chunk_overlap
+    def __init__(self,faiss_indexer:FAISSIndexer,text_splitter:RecursiveCharacterTextSplitter):
+        self.text_splitter = text_splitter
         self.faiss_indexer = faiss_indexer
     
     def chunk(self,pdf_path:Path):
@@ -131,10 +130,7 @@ class TextChunker():
         self.faiss_indexer.add_documents(chunks_doc_processed)
     
     def _chunk_text(self,pages):
-        # TODO: Add a way to pass kwargs to the text splitter (e.g. length_function)
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=self.chunk_size,
-                                                       chunk_overlap=self.chunk_overlap)
-        return text_splitter.split_documents(pages)
+        return self.text_splitter.split_documents(pages)
     
     def _get_chunk_summary(self,chunk:Document):
         # TODO: Implement a way to get the chunk summary (call SummaryAgent Utility?)
