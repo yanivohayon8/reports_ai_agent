@@ -113,7 +113,7 @@ class TextChunker():
         self.faiss_indexer = faiss_indexer
     
     def chunk(self,pdf_path:Path):
-        pages = read_pdf(pdf_path,loader="PyPDFLoader")
+        pages = read_pdf(pdf_path,format="documents")
         chunks = self._chunk_text(pages)
 
         chunks_doc_processed = []
