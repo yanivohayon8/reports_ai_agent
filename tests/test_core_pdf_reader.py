@@ -8,7 +8,7 @@ from core.pdf_reader import read_pdf
 
 @pytest.fixture
 def pdf_path():
-    return pathlib.Path("core/tests/data/report.pdf")
+    return pathlib.Path("tests/data/report.pdf")
 
 def test_read_pdf(pdf_path):
     text = read_pdf(pdf_path)
