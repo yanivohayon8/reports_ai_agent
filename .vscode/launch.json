@@ -5,11 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "summary_cli.py",
+            "name": "index_cli with directory",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/summary_agent/summary_cli.py",
-            "args": ["pdfs/report.pdf", "--method", "map_reduce", "--model", "gpt-4o-mini"],
+            "program": "${workspaceFolder}/indexer/indexer_cli.py",
+            "args": ["--directory","pdfs/cities", "--faiss-indexer-directory", "vectordb_indexes/faiss_indexer_cities"],
             "console": "integratedTerminal"
         },
         {
