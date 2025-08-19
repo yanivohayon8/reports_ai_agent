@@ -3,8 +3,10 @@ import os
 import glob
 from pathlib import Path
 
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from core.text_splitter import get_text_splitter
 from indexer import TextChunker,FAISSIndexer
 
 
@@ -13,8 +15,6 @@ if __name__ == "__main__":
     parser.add_argument("--directory", type=str, help="Path to the directory containing PDF files to index. Example: 'pdfs'")
     parser.add_argument("--pdf-path", type=str, help="Path to a single PDF file to index. Example: 'pdfs/report.pdf'")
     parser.add_argument("--faiss-indexer-directory", type=str, required=True, help="Path to the FAISS indexer directory. Example: 'vectordb_indexes/faiss_indexer'")
-    parser.add_argument("--chunk-size", type=int, default=300, help="Chunk size for the text splitter. Example: 300")
-    parser.add_argument("--chunk-overlap", type=int, default=50, help="Chunk overlap for the text splitter. Example: 50")
 
     args = parser.parse_args()
 
@@ -30,7 +30,7 @@ if __name__ == "__main__":
         os.makedirs(faiss_indexer_directory)
 
     faiss_indexer = FAISSIndexer.from_small_embedding(directory_path=faiss_indexer_directory)
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=args.chunk_size, chunk_overlap=args.chunk_overlap)
+    text_splitter = get_text_splitter()
     text_chunker = TextChunker(faiss_indexer,text_splitter)
 
     if args.pdf_path is not None:

@@ -35,3 +35,6 @@ def verify_and_get_environment_variable(name):
     _verify_environment_variable(name)
 
     return _get_environment_variable(name)
+
+def verify_llama_parse_api_key():
+    _verify_environment_variable("LLAMA_CLOUD_API_KEY")

@@ -118,9 +118,7 @@ class TextChunker():
         chunks_doc_processed = []
 
         for chunk in chunks:
-            metadata = {}
-            metadata["FileName"] = chunk.metadata.get("source")
-            metadata["PageNumber"] = chunk.metadata.get("page")
+            metadata = chunk.metadata
             metadata["ChunkSummary"] = self._get_chunk_summary(chunk)
             metadata["Keywords"] = self._get_keywords(chunk)
             metadata["FigureId"] = self._get_figure_id(chunk)
