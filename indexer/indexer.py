@@ -13,7 +13,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.api_utils import get_openai_embeddings
 from core.pdf_reader import read_pdf
-
+import json
 
 
 class FAISSIndexer():
@@ -48,6 +48,8 @@ class FAISSIndexer():
         else:
             self._initialize_index()
 
+        self.metadata = {}
+
     def _is_index_exists(self,directory_path:str):
         if not os.path.exists(directory_path):
             return False
@@ -75,10 +77,6 @@ class FAISSIndexer():
     def add_documents(self,documents:List[Document]):
         self.vector_store.add_documents(documents) 
 
-    def save(self,directory_path:str):
-        os.makedirs(directory_path,exist_ok=True)
-        self.vector_store.save_local(directory_path) 
-
     def retrieve(self,query:str,**kwargs):
         num_documents = kwargs.get("num_documents",self._get_num_documents(**kwargs))
         return self.vector_store.similarity_search(query,num_documents)
@@ -87,6 +85,28 @@ class FAISSIndexer():
         # TODO: Implement a better way to get the number of documents?
         return 10
 
+    def save(self,directory_path:str):
+        os.makedirs(directory_path,exist_ok=True)
+        self.vector_store.save_local(directory_path) 
+        self._save_metadata(os.path.join(Path(directory_path),"custom_metadata.json"))
+
+    def _save_metadata(self,file_path:Path):
+        with open(file_path,"w") as f:
+            json.dump(self.metadata,f)
+
+    def audit_processed_pdf(self,pdf_path:Path):
+        self.metadata.setdefault("processed_pdfs",[])
+        self.metadata["processed_pdfs"].append(str(pdf_path))
+
+    def audit_splitter(self,text_splitter:RecursiveCharacterTextSplitter):
+        self.metadata.setdefault("text_splitter",{})
+        self.metadata["text_splitter"]["class_name"] = text_splitter.__class__.__name__
+
+        self.metadata["text_splitter"]["params"] = {
+            "chunk_size": text_splitter._chunk_size,
+            "chunk_overlap": text_splitter._chunk_overlap,
+            "length_function": text_splitter._length_function.__name__
+        }
 
 
 class TextChunker():
@@ -126,6 +146,8 @@ class TextChunker():
             chunks_doc_processed.append(Document(page_content=chunk.page_content,metadata=metadata))
 
         self.faiss_indexer.add_documents(chunks_doc_processed)
+        self.faiss_indexer.audit_processed_pdf(pdf_path)
+        self.faiss_indexer.audit_splitter(self.text_splitter)
     
     def _chunk_text(self,pages):
         return self.text_splitter.split_documents(pages)
