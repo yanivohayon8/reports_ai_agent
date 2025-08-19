@@ -5,6 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "needle_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/needle_agent/needle_cli.py",
+            "args": [],
+            "console": "integratedTerminal"
+        },
+        {
             "name": "index_cli with directory",
             "type": "debugpy",
             "request": "launch",

@@ -1,0 +1,2 @@
+"faiss_indexer":
+  "directory": "vectordb_indexes/faiss_indexer_tester"
