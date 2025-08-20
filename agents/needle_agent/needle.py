@@ -2,7 +2,7 @@ from indexer.indexer import FAISSIndexer
 from typing import List
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.documents import Document
-from needle_agent.needle_prompts import generation_prompt_template
+from agents.needle_agent.needle_prompts import generation_prompt_template
 
 
 class NeedleAgent():

@@ -1,4 +1,4 @@
-from needle_agent.needle import NeedleAgent
+from agents.needle_agent.needle import NeedleAgent
 from indexer.indexer import FAISSIndexer
 from core.api_utils import get_llm_langchain_openai
 

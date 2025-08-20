@@ -12,8 +12,8 @@ from indexer import TextChunker,FAISSIndexer
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Indexer CLI")
-    parser.add_argument("--directory", type=str, help="Path to the directory containing PDF files to index. Example: 'pdfs'")
-    parser.add_argument("--pdf-path", type=str, help="Path to a single PDF file to index. Example: 'pdfs/report.pdf'")
+    parser.add_argument("--directory", type=str, help="Path to the directory containing PDF files to index. Example: 'data'")
+    parser.add_argument("--pdf-path", type=str, help="Path to a single PDF file to index. Example: 'data/report.pdf'")
     parser.add_argument("--faiss-indexer-directory", type=str, required=True, help="Path to the FAISS indexer directory. Example: 'vectordb_indexes/faiss_indexer'")
 
     args = parser.parse_args()

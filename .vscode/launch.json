@@ -8,7 +8,7 @@
             "name": "needle_cli.py",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/needle_agent/needle_cli.py",
+            "program": "${workspaceFolder}/agents/needle_agent/needle_cli.py",
             "args": [],
             "console": "integratedTerminal"
         },
@@ -17,7 +17,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/indexer/indexer_cli.py",
-            "args": ["--directory","pdfs/insurance", "--faiss-indexer-directory", "vectordb_indexes/faiss_indexer_insurance"],
+            "args": ["--directory","data/insurance", "--faiss-indexer-directory", "vectordb_indexes/faiss_indexer_insurance"],
             "console": "integratedTerminal"
         },
         {
@@ -25,7 +25,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/indexer/indexer_cli.py",
-            "args": ["--pdf-path", "pdfs/report.pdf", "--faiss-indexer-directory", "vectordb_indexes/faiss_indexer_report"],
+            "args": ["--pdf-path", "data/report.pdf", "--faiss-indexer-directory", "vectordb_indexes/faiss_indexer_report"],
             "console": "integratedTerminal"
         },
         /// OLD CANNOT BE USED: 

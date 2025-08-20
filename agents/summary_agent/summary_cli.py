@@ -4,7 +4,7 @@ from  pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 
 from core.api_utils import get_llm_langchain_openai
-from summary_agent.summary import SummaryAgent
+from agents.summary_agent.summary import SummaryAgent
 from core.text_splitter import get_text_splitter    
 
 def main():
