@@ -9,3 +9,17 @@ tests/__pycache__/test_core_indexer.cpython-313-pytest-8.4.1.pyc
 tests/__pycache__/test_core_pdf_reader.cpython-313-pytest-8.4.1.pyc
 tests/__pycache__/test_summary_iterative.cpython-313-pytest-8.4.1.pyc
 tests/__pycache__/test_summary_map_reduce.cpython-313-pytest-8.4.1.pyc
+core/__pycache__/config_utils.cpython-313.pyc
+core/__pycache__/text_splitter.cpython-313.pyc
+core/__pycache__/user_interface.cpython-313.pyc
+indexer/__pycache__/__init__.cpython-313.pyc
+indexer/__pycache__/indexer.cpython-313.pyc
+needle_agent/__pycache__/needle_prompts.cpython-313.pyc
+needle_agent/__pycache__/needle.cpython-313.pyc
+summary_agent/__pycache__/prompts.cpython-313.pyc
+tests/__pycache__/test_core_user_input.cpython-313-pytest-8.4.1.pyc
+tests/__pycache__/test_core_user_interface.cpython-313-pytest-8.4.1.pyc
+tests/__pycache__/test_indexer_indexer.cpython-313-pytest-8.4.1.pyc
+tests/__pycache__/test_needle_agent.cpython-313-pytest-8.4.1.pyc
+tests/__pycache__/test_summary.cpython-313-pytest-8.4.1.pyc
+.cursor/

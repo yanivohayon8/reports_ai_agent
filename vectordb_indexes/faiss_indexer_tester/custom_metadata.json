@@ -1,0 +1,13 @@
+{
+    "processed_pdfs": [
+        "pdfs\\report.pdf"
+    ],
+    "text_splitter": {
+        "class_name": "RecursiveCharacterTextSplitter",
+        "params": {
+            "chunk_size": 300,
+            "chunk_overlap": 50,
+            "length_function": "len"
+        }
+    }
+}
