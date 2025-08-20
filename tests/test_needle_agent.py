@@ -12,8 +12,12 @@ def test_needle_agent():
     answer = needle_agent.answer(query)
 
     print("-"*50 + "answer" + "-"*50)
-    print(answer["answer"])
+    print("\t" + answer["answer"])
 
-    print("-"*50 + "chunks" + "-"*50)
-    print(answer["chunks"])
+    print("\t-"*50 + "chunks" + "-"*50)
+    
+    for chunk in answer["chunks"]:
+        print("\t" + chunk["page_content"])
+        print("\t-"*50 + "metadata" + "-"*50)
+        print("\t" + str(chunk["metadata"]))
     
