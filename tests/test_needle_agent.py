@@ -8,7 +8,7 @@ def test_agent_compiles():
     llm = get_llm_langchain_openai(model="gpt-4o-mini")
     needle_agent = NeedleAgent(faiss_indexer,llm)
 
-    query = "Who is the main person in the report?"
+    query = "What happened to Alex from Canada?"
     answer = needle_agent.answer(query)
 
     print("-"*50 + "answer" + "-"*50)
@@ -21,4 +21,3 @@ def test_agent_compiles():
         print("\t" + chunk["page_content"])
         print("\t" + "-"*50 + "metadata" + "-"*50)
         print("\t" + str(chunk["metadata"]))
-    

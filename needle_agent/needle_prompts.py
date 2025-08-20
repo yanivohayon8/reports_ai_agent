@@ -19,7 +19,7 @@ GENERATION_SYSTEM_MESSAGE = """
 
     ## Context
     Here is the relevant retrieved information from the knowledge base:
-    {{context}}
+    {context}
 
     ## Definitions
     - Event Report: A factual description of an incident (e.g., car accident, water damage, theft) submitted to an insurance company.
