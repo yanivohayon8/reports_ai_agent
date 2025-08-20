@@ -110,22 +110,6 @@ class FAISSIndexer():
 
 
 class TextChunker():
-    @staticmethod
-    def get_metadata_keys():
-        return  [
-                "FileName",
-                "PageNumber",
-                "ChunkSummary",
-                "Keywords",
-                "CriticalEntities",
-                "IncidentDate", # if relevant
-                "SectionType", # if relevant
-                "AmountRange", # if relevant
-                "FigureId", # if relevant
-                "TableId", # if relevant
-                "ClientId", # if relevant
-                "CaseId" # if relevant
-            ]
     
     def __init__(self,faiss_indexer:FAISSIndexer,text_splitter:RecursiveCharacterTextSplitter):
         self.text_splitter = text_splitter
@@ -138,6 +122,7 @@ class TextChunker():
         chunks_doc_processed = []
 
         for chunk in chunks:
+            # TODO: fix this bug - it is the metadata of the whole page, not the chunk
             metadata = chunk.metadata
             metadata["ChunkSummary"] = self._get_chunk_summary(chunk)
             metadata["Keywords"] = self._get_keywords(chunk)
