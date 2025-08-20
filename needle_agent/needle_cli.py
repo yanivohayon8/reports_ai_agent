@@ -11,7 +11,7 @@ def main():
     faiss_config = config["faiss_indexer"]
     faiss_indexer = FAISSIndexer.from_small_embedding(directory_path=faiss_config["directory"])
     needle_agent = NeedleAgent(faiss_indexer)
-    chat = ConsoleChat(needle_agent.search)
+    chat = ConsoleChat(needle_agent.answer)
     chat.start()
 
 

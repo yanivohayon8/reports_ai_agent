@@ -17,7 +17,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/indexer/indexer_cli.py",
-            "args": ["--directory","pdfs/cities", "--faiss-indexer-directory", "vectordb_indexes/faiss_indexer_cities"],
+            "args": ["--directory","pdfs/insurance", "--faiss-indexer-directory", "vectordb_indexes/faiss_indexer_insurance"],
             "console": "integratedTerminal"
         },
         {
