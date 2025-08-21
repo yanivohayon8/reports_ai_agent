@@ -5,6 +5,39 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "router_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/agents/router_agent/router_cli.py",
+            "args": [],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "needle_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/agents/needle_agent/needle_cli.py",
+            "args": [],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "index_cli with directory",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/indexer/indexer_cli.py",
+            "args": ["--directory","data/insurance", "--faiss-indexer-directory", "vectordb_indexes/faiss_indexer_insurance"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "indexer_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/indexer/indexer_cli.py",
+            "args": ["--pdf-path", "data/report.pdf", "--faiss-indexer-directory", "vectordb_indexes/faiss_indexer_report"],
+            "console": "integratedTerminal"
+        },
+        /// OLD CANNOT BE USED: 
+        {
             "name": "evaluate_batch_llm_first.py",
             "type": "debugpy",
             "request": "launch",
