@@ -38,7 +38,16 @@ def test_create_chunks():
     assert "answer" in questions_and_answers[0]
 
 
-
+def test_create_dataset_from_pdf():
+    llm = get_llm_langchain_openai(model="gpt-4o-mini")
+    dataset_creator = DatasetCreator(llm)    
+    pdf_path = Path(os.path.join("tests","data","report.pdf"))
+    questions_and_answers = dataset_creator.create_dataset(pdf_path, n_chunks=2)
+    assert isinstance(questions_and_answers, list)
+    assert len(questions_and_answers) > 0
+    assert isinstance(questions_and_answers[0], dict)
+    assert "question" in questions_and_answers[0]
+    assert "answer" in questions_and_answers[0]
 
 
 

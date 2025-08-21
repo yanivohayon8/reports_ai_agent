@@ -15,8 +15,9 @@ class DatasetCreator:
         self.min_chunk_overlap = min_chunk_overlap
         self.max_chunk_overlap = max_chunk_overlap
 
-    def create_dataset(self):
-        pass
+    def create_dataset(self, pdf_path: str, n_chunks: int=10):
+        text = read_pdf(pdf_path, format="text")
+        return self.create_dataset_from_text(text, n_chunks=n_chunks)
 
     def create_dataset_from_text(self, text: str, n_chunks: int=10):
         chunks = self._create_chunks(text)
