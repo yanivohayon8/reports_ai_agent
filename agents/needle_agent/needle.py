@@ -10,6 +10,15 @@ class NeedleAgent():
     def __init__(self, faiss_indexer:FAISSIndexer, llm:BaseChatModel) -> None:
         self.faiss_indexer = faiss_indexer
         self.llm = llm
+        
+    async def handle(self, query: str) -> str:
+        """
+        Adapter for RouterAgent.
+        Returns only the answer (without debug info).
+        """
+        result = self.answer(query)
+        return result["answer"]
+
 
     def answer(self, query:str)->dict:
         context,chunks = self._retrieve_context(query)

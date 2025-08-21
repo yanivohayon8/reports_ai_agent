@@ -10,6 +10,14 @@ class SummaryAgent:
     def __init__(self,text_splitter:RecursiveCharacterTextSplitter,llm:BaseChatModel):
         self.llm = llm
         self.text_splitter = text_splitter
+        
+    async def handle(self, query: str) -> str:
+        """
+        Adapter for RouterAgent.
+        Returns only the answer (without debug info).
+        """
+        result = self.summarize(query)
+        return result["answer"]
 
     def summarize_single_pdf(self,pdf_path:pathlib.Path, method:str):
         text = read_pdf(pdf_path,format="text")

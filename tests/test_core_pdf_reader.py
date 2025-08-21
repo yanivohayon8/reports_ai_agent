@@ -1,9 +1,15 @@
+import os
 import pytest
 from pathlib import Path
 import sys
 import pandas as pd
 
 sys.path.append(str(Path(__file__).parent.parent))
+
+# Skip if llama_parse is not installed or API key missing
+pytest.importorskip("llama_parse")
+if not os.environ.get("LLAMA_CLOUD_API_KEY"):
+    pytest.skip("LLAMA_CLOUD_API_KEY not set; skipping PDF parsing tests.", allow_module_level=True)
 
 from core import pdf_reader
 
