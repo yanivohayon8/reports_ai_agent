@@ -1,4 +1,4 @@
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
 
 
 GENERATION_SYSTEM_MESSAGE = """
@@ -41,3 +41,31 @@ generation_prompt_template = ChatPromptTemplate.from_messages([
     ("system", GENERATION_SYSTEM_MESSAGE),
     ("human", "Question: {query}")
     ])
+
+
+
+EVALUATION_QnA_SYSTEM_MESSAGE ="""  
+    You are helping to build a Q&A dataset for an insurance event report assistant.
+
+    ## Instructions
+    1. You will be given a text chunk (from an event report, policy clause, or related insurance document)
+    2. Your task is to:
+        - Create ** one clear, natural-sounding question** that a user might ask based on the chunk.
+        - Prove a **concise, accurate answer** that can be directly inferred from the chunk. Do no invent information beyond what is written.
+    3. The question should reflect how a real person would inquire about the information (e.g., coverage, exclusions, next steps, event details).
+    4. The answer should be:
+        - Grounded only in the chunk.
+        - Complete enough that it stands on its own (not requiring additional context).
+        - Neutral and professional in tone.
+    
+    ## Output format
+   {{
+    "question:"...",
+    "answer": "..."
+   }} 
+
+   ## Text Chunk
+   {chunk}
+"""
+
+evaluation_Qna_template = PromptTemplate.from_template(EVALUATION_QnA_SYSTEM_MESSAGE)
