@@ -4,8 +4,7 @@ sys.path.append(".")
 from agents.needle_agent.needle_evaluator import NeedleEvaluator
 from pathlib import Path
 from core.api_utils import get_llm_langchain_openai
-from agents.needle_agent.needle_dataset_synthesizer import load_needle_dataset
-from agents.needle_agent.needle import NeedleAgent
+from agents.needle_agent.needle_agent import NeedleAgent
 from core.config_utils import load_config
 import argparse
 from indexer.indexer import FAISSIndexer
@@ -26,7 +25,7 @@ def init_needle_evaluator(config: dict):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config-path", type=str, default="agents/needle_agent/needle_evaluator.yaml")
+    parser.add_argument("--config-path", type=str, default="agents/needle_agent/needle_evaluator_config.yaml")
     args = parser.parse_args()
 
     config = load_config(args.config_path)

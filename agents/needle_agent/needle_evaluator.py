@@ -1,6 +1,6 @@
 from agents.needle_agent.needle_dataset_synthesizer import load_needle_dataset
 from pathlib import Path
-from agents.needle_agent.needle import NeedleAgent
+from agents.needle_agent.needle_agent import NeedleAgent
 from typing import List
 from ragas.metrics import (
     Faithfulness,

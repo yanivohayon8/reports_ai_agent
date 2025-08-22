@@ -1,5 +1,5 @@
 from agents.needle_agent.needle_evaluator import NeedleEvaluator
-from agents.needle_agent.needle import NeedleAgent
+from agents.needle_agent.needle_agent import NeedleAgent
 from pathlib import Path
 from core.api_utils import get_llm_langchain_openai
 from indexer.indexer import FAISSIndexer

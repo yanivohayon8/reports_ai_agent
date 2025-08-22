@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Literal, Optional, Any
 
 from agents.summary_agent.summary import SummaryAgent
-from agents.needle_agent.needle import NeedleAgent
+from agents.needle_agent.needle_agent import NeedleAgent
 from agents.tableQA_agent.tableQA import TableQAgent
 from retrieval.hybrid_retriever import HybridRetriever
 from langchain_core.prompts import ChatPromptTemplate

@@ -29,10 +29,10 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "needle_cli.py",
+            "name": "needle_agent_cli.py",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/agents/needle_agent/needle_cli.py",
+            "program": "${workspaceFolder}/agents/needle_agent/needle_agent_cli.py",
             "args": [],
             "console": "integratedTerminal"
         },
