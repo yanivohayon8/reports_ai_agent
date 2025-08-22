@@ -5,6 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "needle_evaluator_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/agents/needle_agent/needle_evaluator_cli.py",
+            "args": [],
+            "console": "integratedTerminal"
+        },
+        {
             "name": "needle_dataset_synthesize_cli.py",
             "type": "debugpy",
             "request": "launch",

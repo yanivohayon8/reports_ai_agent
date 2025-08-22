@@ -21,8 +21,8 @@ class NeedleEvaluator:
         self.metrics = None # let ragas decide (not recommended)
 
         if selected_metrics:
-            metrics_titles = [metric.title() for metric in selected_metrics]
-            self.metrics = [supported_metric() for supported_metric in SUPPORTED_METRICS if supported_metric.__name__ in metrics_titles]
+            self.metrics = [supported_metric() for supported_metric in SUPPORTED_METRICS \
+                            if supported_metric.__name__ in selected_metrics]
 
         self.evaluator_llm = LangchainLLMWrapper(llm)
 

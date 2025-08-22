@@ -1,0 +1,10 @@
+"NeedleAgent":
+  "llm":
+    "model": "gpt-4o-mini"
+  "indexer":
+    "faiss_directory": "vectordb_indexes/faiss_indexer_insurance"
+"Dataset":
+  "ground_truth_dataset_path": "data/evaluation_datasets/needle_agent/client2_report2_tourAndCarePolicy.jsonl"
+"Evaluator":
+  "metrics": ["Faithfulness","LLMContextRecall","LLMContextPrecisionWithReference"]
+  "evaluator_llm": "gpt-4o-mini"
