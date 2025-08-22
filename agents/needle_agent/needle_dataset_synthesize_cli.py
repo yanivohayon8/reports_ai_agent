@@ -4,37 +4,11 @@ sys.path.append(".")
 from core.api_utils import get_llm_langchain_openai
 from pathlib import Path
 import os
-from agents.needle_agent.needle_dataset_synthesizer import DatasetSynthesizer
+from agents.needle_agent.needle_dataset_synthesizer import DatasetSynthesizer, save_needle_dataset
 import argparse
 from core.config_utils import load_config
 import json
 from datetime import datetime
-
-def save_dataset_to_file(questions_and_answers, pdf_path, output_dir):
-    """
-    Save questions and answers dataset to a JSONL file.
-    
-    Args:
-        questions_and_answers: List of question-answer dictionaries
-        pdf_path: Path to the source PDF file
-        output_dir: Directory to save the output file
-    
-    Returns:
-        int: Number of question-answer pairs saved
-    """
-    # Create filename based on PDF name
-    pdf_name = pdf_path.stem  # Remove .pdf extension
-    output_file = output_dir / f"{pdf_name}.jsonl"
-    
-    print(f"Processing: {pdf_path.name}")
-    print(f"Saving dataset to: {output_file}")
-    
-    with open(output_file, "w") as f:
-        for question_and_answer in questions_and_answers:
-            f.write(json.dumps(question_and_answer) + "\n")
-    
-    print(f"Dataset saved successfully with {len(questions_and_answers)} question-answer pairs")
-    return len(questions_and_answers)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -68,7 +42,7 @@ if __name__ == "__main__":
         pdf_path = Path(args.pdf_path)
         questions_and_answers = dataset_creator.create_dataset(pdf_path, n_chunks=config["n_chunks"])
         
-        total_qa_pairs += save_dataset_to_file(questions_and_answers, pdf_path, output_dir)
+        total_qa_pairs += save_needle_dataset(questions_and_answers, pdf_path, output_dir)
 
     elif args.pdf_directory:
         # Multiple PDF files
@@ -83,7 +57,7 @@ if __name__ == "__main__":
         for pdf_path in pdf_paths:
             try:
                 questions_and_answers = dataset_creator.create_dataset(pdf_path, n_chunks=config["n_chunks"])
-                total_qa_pairs += save_dataset_to_file(questions_and_answers, pdf_path, output_dir)
+                total_qa_pairs += save_needle_dataset(questions_and_answers, pdf_path, output_dir)
                 
             except Exception as e:
                 print(f"Error processing {pdf_path.name}: {e}")

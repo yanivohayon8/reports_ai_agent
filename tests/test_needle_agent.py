@@ -16,8 +16,8 @@ def test_agent_compiles():
 
     print("\t" + "-"*50 + "chunks" + "-"*50)
     
-    for chunk in answer["chunks"]:
+    for chunk_content,chunk_metadata in zip(answer["chunks_content"],answer["chunks_metadata"]):
         print("\t" + "-"*50 + "page_content" + "-"*50)
-        print("\t" + chunk["page_content"])
+        print("\t" + chunk_content)
         print("\t" + "-"*50 + "metadata" + "-"*50)
-        print("\t" + str(chunk["metadata"]))
+        print("\t" + str(chunk_metadata))

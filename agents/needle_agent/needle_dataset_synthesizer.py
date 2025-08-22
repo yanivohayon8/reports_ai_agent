@@ -63,4 +63,52 @@ class DatasetSynthesizer:
         return question_and_answer
 
 
+def save_needle_dataset(questions_and_answers: list[dict], pdf_path: Path, output_dir: Path) -> int:
+    """
+    Save questions and answers dataset to a JSONL file.
+    
+    Args:
+        questions_and_answers: List of question-answer dictionaries
+        pdf_path: Path to the source PDF file
+        output_dir: Directory to save the output file
+    
+    Returns:
+        int: Number of question-answer pairs saved
+    """
+    # Create filename based on PDF name
+    pdf_name = pdf_path.stem  # Remove .pdf extension
+    output_file = output_dir / f"{pdf_name}.jsonl"
+    
+    print(f"Processing: {pdf_path.name}")
+    print(f"Saving dataset to: {output_file}")
+    
+    with open(output_file, "w") as f:
+        for question_and_answer in questions_and_answers:
+            f.write(json.dumps(question_and_answer) + "\n")
+    
+    print(f"Dataset saved successfully with {len(questions_and_answers)} question-answer pairs")
+    return len(questions_and_answers)
+
+
+def load_needle_dataset(dataset_path: Path) -> list[dict]:
+    """
+    Load questions and answers dataset from a JSONL file.
+    
+    Args:
+        dataset_path: Path to the JSONL dataset file
+    
+    Returns:
+        list[dict]: List of question-answer dictionaries
+    """
+    questions_and_answers = []
+    
+    with open(dataset_path, "r") as f:
+        for line in f:
+            if line.strip():  # Skip empty lines
+                questions_and_answers.append(json.loads(line.strip()))
+    
+    print(f"Loaded dataset from {dataset_path} with {len(questions_and_answers)} question-answer pairs")
+    return questions_and_answers
+
+
     

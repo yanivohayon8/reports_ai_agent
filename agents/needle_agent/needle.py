@@ -24,11 +24,12 @@ class NeedleAgent():
         context,chunks = self._retrieve_context(query)
         answer = self._generate(context, query)
 
-        chunks_debug_info = self._get_chunks_debug_info(chunks)
+        chunks_content,chunks_metadata = self._get_chunks_info(chunks)
 
         return {
             "answer":answer,
-            "chunks":chunks_debug_info
+            "chunks_content":chunks_content,
+            "chunks_metadata":chunks_metadata
         }
 
     def _retrieve_context(self, query:str)->tuple[str,List[Document]]:
@@ -46,5 +47,7 @@ class NeedleAgent():
 
         return answer.content
 
-    def _get_chunks_debug_info(self,chunks:List[Document])->str:
-        return [{"page_content":chunk.page_content,"metadata":chunk.metadata} for chunk in chunks]
+    def _get_chunks_info(self,chunks:List[Document])->tuple[List[str],List[dict]]:
+        chunks_content = [chunk.page_content for chunk in chunks]
+        chunks_metadata = [chunk.metadata for chunk in chunks]
+        return chunks_content,chunks_metadata
