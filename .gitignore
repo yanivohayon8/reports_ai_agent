@@ -1,3 +1,5 @@
+__pycache__/
+
 __pycache__/conftest.cpython-313-pytest-8.4.1.pyc
 core/__pycache__/__init__.cpython-313.pyc
 core/__pycache__/api_utils.cpython-313.pyc
