@@ -13,6 +13,14 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "router_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/agents/router_agent/router_cli.py",
+            "args": [],
+            "console": "integratedTerminal"
+        },
+        {
             "name": "needle_cli.py",
             "type": "debugpy",
             "request": "launch",
