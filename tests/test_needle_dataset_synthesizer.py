@@ -1,13 +1,17 @@
 import os
-from agents.needle_agent.evaluator import DatasetCreator
+from agents.needle_agent.needle_dataset_synthesizer import DatasetSynthesizer
 from core.pdf_reader import read_pdf
 from pathlib import Path
 from core.api_utils import get_llm_langchain_openai
 
 
 def test_dataset_create_chunk():
+    min_chunk_size=100
+    max_chunk_size=400
+    min_chunk_overlap=20
+    max_chunk_overlap=100
     llm = get_llm_langchain_openai(model="gpt-4o-mini")
-    dataset_creator = DatasetCreator(llm)    
+    dataset_creator = DatasetSynthesizer(llm,min_chunk_size,max_chunk_size,min_chunk_overlap,max_chunk_overlap)    
     pdf_path = Path(os.path.join("tests","data","report.pdf"))
     text = read_pdf(pdf_path, format="text")
     chunk_size = 400
@@ -25,8 +29,12 @@ def test_dataset_create_chunk():
     assert "answer" in response_json
 
 def test_create_chunks():
+    min_chunk_size=100
+    max_chunk_size=400
+    min_chunk_overlap=20
+    max_chunk_overlap=100
     llm = get_llm_langchain_openai(model="gpt-4o-mini")
-    dataset_creator = DatasetCreator(llm)    
+    dataset_creator = DatasetSynthesizer(llm,min_chunk_size,max_chunk_size,min_chunk_overlap,max_chunk_overlap)    
     pdf_path = Path(os.path.join("tests","data","report.pdf"))
     text = read_pdf(pdf_path, format="text")
 
@@ -39,8 +47,12 @@ def test_create_chunks():
 
 
 def test_create_dataset_from_pdf():
+    min_chunk_size=100
+    max_chunk_size=400
+    min_chunk_overlap=20
+    max_chunk_overlap=100
     llm = get_llm_langchain_openai(model="gpt-4o-mini")
-    dataset_creator = DatasetCreator(llm)    
+    dataset_creator = DatasetSynthesizer(llm,min_chunk_size,max_chunk_size,min_chunk_overlap,max_chunk_overlap)    
     pdf_path = Path(os.path.join("tests","data","report.pdf"))
     questions_and_answers = dataset_creator.create_dataset(pdf_path, n_chunks=2)
     assert isinstance(questions_and_answers, list)

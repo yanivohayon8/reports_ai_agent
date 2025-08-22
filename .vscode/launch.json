@@ -5,6 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "needle_dataset_synthesize_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/agents/needle_agent/needle_dataset_synthesize_cli.py",
+            "args": ["--pdf-directory", "data/insurance"],
+            "console": "integratedTerminal"
+        },
+        {
             "name": "needle_cli.py",
             "type": "debugpy",
             "request": "launch",

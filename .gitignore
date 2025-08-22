@@ -23,3 +23,6 @@ tests/__pycache__/test_indexer_indexer.cpython-313-pytest-8.4.1.pyc
 tests/__pycache__/test_needle_agent.cpython-313-pytest-8.4.1.pyc
 tests/__pycache__/test_summary.cpython-313-pytest-8.4.1.pyc
 .cursor/
+
+# Evaluation datasets - uncomment if you want to ignore generated datasets
+data/evaluation_datasets/

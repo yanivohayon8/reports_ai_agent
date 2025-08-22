@@ -4,20 +4,26 @@ import random
 from langchain_core.language_models import BaseChatModel
 from agents.needle_agent.needle_prompts import evaluation_Qna_template
 import json
+from pathlib import Path
 
-class DatasetCreator:
+class DatasetSynthesizer:
     def __init__(self, llm:BaseChatModel, 
-                 min_chunk_size: int=400, max_chunk_size: int=1000,
-                 min_chunk_overlap: int=100, max_chunk_overlap: int=200):
+                 min_chunk_size: int, max_chunk_size: int,
+                 min_chunk_overlap: int, max_chunk_overlap: int):
         self.llm = llm
         self.min_chunk_size = min_chunk_size
         self.max_chunk_size = max_chunk_size
         self.min_chunk_overlap = min_chunk_overlap
         self.max_chunk_overlap = max_chunk_overlap
 
-    def create_dataset(self, pdf_path: str, n_chunks: int=10):
+    def create_dataset(self, pdf_path: Path, n_chunks: int=10):
         text = read_pdf(pdf_path, format="text")
-        return self.create_dataset_from_text(text, n_chunks=n_chunks)
+        questions_and_answers = self.create_dataset_from_text(text, n_chunks=n_chunks)
+
+        for question_and_answer in questions_and_answers:
+            question_and_answer["file_path"] = str(pdf_path)
+
+        return questions_and_answers
 
     def create_dataset_from_text(self, text: str, n_chunks: int=10):
         chunks = self._create_chunks(text)
@@ -38,11 +44,15 @@ class DatasetCreator:
         return chunks
     
     def _select_random_chunk(self,chunks: list[str], n_chunks: int)->list[str]:
-        random_chunks = random.sample(chunks, n_chunks)
+        random_chunks = chunks if n_chunks >= len(chunks) else random.sample(chunks, n_chunks)
         return random_chunks
     
     def _generate_questions_and_answers(self,chunks: list[str])->list[dict]:
-        questions_and_answers = [self._generate_answer_and_question(chunk) for chunk in chunks]
+        questions_and_answers = []
+        for chunk in chunks:
+            question_and_answer = self._generate_answer_and_question(chunk)
+            question_and_answer["reference_chunk"] = chunk
+            questions_and_answers.append(question_and_answer)
         return questions_and_answers
 
     def _generate_answer_and_question(self,chunk: str)->dict:
@@ -54,4 +64,3 @@ class DatasetCreator:
 
 
     
-
