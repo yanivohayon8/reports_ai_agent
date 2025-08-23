@@ -1,0 +1,18 @@
+"FAISSIndexer":
+  "directory_path": "vectordb_indexes/needle"
+  "embeddings":
+    "model": "text-embedding-3-small"
+    "dimensions": 1536
+"text_splitter":
+  "chunk_size": 300
+  "chunk_overlap": 50
+  "length_function": "tiktoken_len"
+  "separators":
+    - "\n## " # section headers
+    - "\n### " # subsection headers
+    - "\n- " # bullet points
+    - "\n* " # alt bullet points
+    - "\n\n" # paragraphs
+    - "\n" # lines
+    - " " # words
+    - "" # fallback: characters

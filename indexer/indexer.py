@@ -25,7 +25,7 @@ class FAISSIndexer():
     @classmethod
     def from_small_embedding(cls,embedding_model_name:str="text-embedding-3-small",directory_path:str=None, # type: ignore
                              dimension:int=1536):
-        embeddings = get_openai_embeddings(model=embedding_model_name,dimensions=dimension)
+        embeddings = get_openai_embeddings(model=embedding_model_name,dimension=dimension)
 
         return cls(embeddings,directory_path)
 
@@ -109,7 +109,9 @@ class FAISSIndexer():
         self.metadata["text_splitter"]["params"] = {
             "chunk_size": text_splitter._chunk_size,
             "chunk_overlap": text_splitter._chunk_overlap,
-            "length_function": text_splitter._length_function.__name__
+            "length_function": text_splitter._length_function.__name__,
+            "separators": text_splitter._separators
+            # TODO: make this more dynamic? 
         }
 
     def get_used_input(self)->dict:
@@ -123,7 +125,7 @@ class FAISSIndexer():
         with open(file_path,"r") as f:
             self.metadata = json.load(f)
 
-class TextChunker():
+class TextChunkerDeprecated():
     
     def __init__(self,faiss_indexer:FAISSIndexer,text_splitter:RecursiveCharacterTextSplitter):
         self.text_splitter = text_splitter
