@@ -49,6 +49,7 @@ class FAISSIndexer():
             self._initialize_index()
 
         self.metadata = {}
+        self.directory_path = directory_path
 
     def _is_index_exists(self,directory_path:str):
         if not os.path.exists(directory_path):
@@ -93,6 +94,9 @@ class FAISSIndexer():
     def _save_metadata(self,file_path:Path):
         with open(file_path,"w") as f:
             json.dump(self.metadata,f)
+    
+    def _get_metadata_file_path(self)->Path:
+        return Path(self.directory_path,"custom_metadata.json")
 
     def audit_processed_pdf(self,pdf_path:Path):
         self.metadata.setdefault("processed_pdfs",[])
@@ -108,6 +112,16 @@ class FAISSIndexer():
             "length_function": text_splitter._length_function.__name__
         }
 
+    def get_used_input(self)->dict:
+        self._load_metadata()
+        
+        return self.metadata
+
+    def _load_metadata(self):
+        file_path = self._get_metadata_file_path()
+
+        with open(file_path,"r") as f:
+            self.metadata = json.load(f)
 
 class TextChunker():
     

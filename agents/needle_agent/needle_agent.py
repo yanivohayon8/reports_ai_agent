@@ -51,3 +51,12 @@ class NeedleAgent():
         chunks_content = [chunk.page_content for chunk in chunks]
         chunks_metadata = [chunk.metadata for chunk in chunks]
         return chunks_content,chunks_metadata
+
+
+    def get_used_input(self)->dict:
+        faiss_indexer_input = self.faiss_indexer.get_used_input()
+
+        return {
+            "faiss_indexer_input": faiss_indexer_input,
+            "llm_model": self.llm._identifying_params,
+        }

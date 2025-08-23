@@ -3,6 +3,10 @@ from agents.needle_agent.needle_agent import NeedleAgent
 from pathlib import Path
 from core.api_utils import get_llm_langchain_openai
 from indexer.indexer import FAISSIndexer
+import json
+import shutil
+from ragas.evaluation import EvaluationResult,EvaluationDataset
+import pandas as pd
 
 def test_supported_metrics():
     ground_truth_dataset_path = Path("tests/data/evaluation_datasets/needle_agent/client2_report2_tourAndCarePolicy.jsonl")
@@ -34,3 +38,17 @@ def test_none_metrics():
 
     assert result is not None
     print(result)
+
+    output_path = Path("tests/data/evaluation_datasets/needle_agent/client2_report2_tourAndCarePolicy_evaluation_results.json")
+    needle_evaluator.save_results(result, output_path, agent=needle_agent)
+
+    assert output_path.exists()
+    assert output_path.is_file()
+
+    with open(output_path, "r") as f:
+        saved_results = json.load(f)
+
+    assert saved_results is not None
+
+    shutil.rmtree(output_path)
+

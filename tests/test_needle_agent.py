@@ -21,3 +21,15 @@ def test_agent_compiles():
         print("\t" + chunk_content)
         print("\t" + "-"*50 + "metadata" + "-"*50)
         print("\t" + str(chunk_metadata))
+
+
+def test_needle_agent_get_used_input():
+    # TODO: use a temp directory for the faiss indexer
+    faiss_indexer = FAISSIndexer.from_small_embedding(directory_path="vectordb_indexes/faiss_indexer_insurance")
+    llm = get_llm_langchain_openai(model="gpt-4o-mini")
+    needle_agent = NeedleAgent(faiss_indexer,llm)
+
+    used_input = needle_agent.get_used_input()
+
+    assert not used_input is None
+    assert isinstance(used_input,dict)

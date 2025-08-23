@@ -11,7 +11,9 @@ from ragas.metrics import (
 from langchain_openai import ChatOpenAI
 from ragas.llms import LangchainLLMWrapper
 from ragas import EvaluationDataset,evaluate as ragas_evaluate
-
+from ragas.evaluation import EvaluationResult
+from pandas import DataFrame
+import json
 
 SUPPORTED_METRICS = [Faithfulness,LLMContextRecall,LLMContextPrecisionWithReference]
 
@@ -48,9 +50,46 @@ class NeedleEvaluator:
             dataset.append(sample)
         
         return EvaluationDataset.from_list(dataset)
-
-
             
+    def save_results(self, evaluation_result: EvaluationResult, output_path: Path, agent: NeedleAgent=None):
+        df_results = evaluation_result.to_pandas()
+        mean_scores = self._compute_mean(df_results)
 
+        if agent:
+            agent_input = agent.get_used_input()
+        else:
+            agent_input = None
+
+        saved_results = {
+            "results": {
+                "mean_scores": mean_scores,
+            },
+            "agent_input": agent_input
+        }
+
+        with open(output_path, "w") as f:
+            json.dump(saved_results, f)
+
+    def _compute_mean(self,df:DataFrame)->dict:
+        try:
+            df = df.drop(columns=["user_input"])
+        except KeyError:
+            pass
+        try:
+            df = df.drop(columns=["retrieved_contexts"])
+        except KeyError:
+            pass
+        try:
+            df = df.drop(columns=["response"])
+        except KeyError:
+            pass
+        try:
+            df = df.drop(columns=["reference"])
+        except KeyError:
+            pass
+
+        means = df.mean(axis=0)
+
+        return means.to_dict()
 
 

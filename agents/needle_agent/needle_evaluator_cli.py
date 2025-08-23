@@ -36,4 +36,8 @@ if __name__ == "__main__":
 
     print("-"*50 + "result" + "-"*50)
     print(result)
+    
+    needle_evaluator.save_results(result, Path(config["Evaluator"]["output_path"]), 
+                                  agent=needle_agent)
+
 

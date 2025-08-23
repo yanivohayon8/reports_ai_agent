@@ -8,3 +8,4 @@
 "Evaluator":
   "metrics": ["Faithfulness","LLMContextRecall","LLMContextPrecisionWithReference"]
   "evaluator_llm": "gpt-4o-mini"
+  "output_path": "data/evaluation_datasets/needle_agent/client2_report2_tourAndCarePolicy_evaluation_results.json"
