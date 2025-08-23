@@ -17,7 +17,7 @@ except Exception:  # pragma: no cover
             return {"text": ""}
 
 
-class TableQAgent:
+class TableQAgent_old:
     def __init__(
         self,
         retriever: HybridRetriever,

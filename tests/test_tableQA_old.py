@@ -1,7 +1,7 @@
 import pytest
 from langchain_core.documents import Document
 
-from agents.tableQA_agent.tableQA import TableQAgent
+from agents.tableQA_agent.tableQA_old import TableQAgent_old
 
 
 class MockRetriever:
@@ -28,7 +28,7 @@ async def test_tableqa_with_table(monkeypatch):
 
     monkeypatch.setattr("agents.tableQA_agent.tableQA.LLMChain.invoke", fake_invoke)
 
-    agent = TableQAgent(retriever=retriever)
+    agent = TableQAgent_old(retriever=retriever)
     result = await agent.handle("Who has the highest salary?")
     assert "FAKE_ANSWER" in result
     assert "Who has the highest salary?" in result
@@ -41,6 +41,6 @@ async def test_tableqa_without_table(monkeypatch):
 
     retriever = MockRetriever(docs)
 
-    agent = TableQAgent(retriever=retriever)
+    agent = TableQAgent_old(retriever=retriever)
     result = await agent.handle("Which row has the max value?")
     assert result == "No relevant table found in the documents."
