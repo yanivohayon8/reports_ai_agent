@@ -30,3 +30,18 @@ def test_event_report_2_as_text():
     text = pdf_reader.read_pdf(pdf_path,format="text")
     assert text is not None
     assert len(text) > 0
+
+def test_event_report_2_as_text_no_split_by_page():
+    pdf_path = Path("tests/data/event_report_2_extended.pdf")
+    text = pdf_reader.read_pdf(pdf_path,format="text",split_by_page=False)
+
+    assert text is not None
+
+
+def test_extract_tables():
+    pdf_path = Path("tests/data/client2_report2_tourAndCarePolicy.pdf")
+    assert pdf_path.exists()
+
+    tables = pdf_reader.extract_tables(pdf_path)
+
+    assert len(tables) == 7

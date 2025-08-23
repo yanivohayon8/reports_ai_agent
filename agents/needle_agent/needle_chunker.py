@@ -20,7 +20,8 @@ class NeedleChunker:
             metadata = self._process_metadata(chunk)
             chunks_doc_processed.append(Document(chunk.page_content,metadata=metadata))
         
-        self._audit_indexer(pdf_path,chunks_doc_processed)
+        self.faiss_indexer.add_documents(chunks_doc_processed)
+        self._audit_indexer(pdf_path)
 
     def _chunk_within_each_page(self, pages:list[Document])->list[Document]:
         return self.text_splitter.split_documents(pages)
@@ -33,10 +34,11 @@ class NeedleChunker:
 
         return metadata
 
-    def _audit_indexer(self, pdf_path: Path,chunks_doc_processed:list[Document]):
-        self.faiss_indexer.add_documents(chunks_doc_processed)
+    def _audit_indexer(self, pdf_path: Path):
         self.faiss_indexer.audit_processed_pdf(pdf_path)
         self.faiss_indexer.audit_splitter(self.text_splitter)
 
     def save(self,directory_path:Path):
         self.faiss_indexer.save(directory_path)
+
+    
