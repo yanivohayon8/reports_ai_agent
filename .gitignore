@@ -49,5 +49,3 @@ pnpm-debug.log*
 .cache/
 .next/
 
-# Evaluation datasets - uncomment if you want to ignore generated datasets
-#data/evaluation_datasets/
