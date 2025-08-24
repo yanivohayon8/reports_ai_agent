@@ -23,3 +23,32 @@ tests/__pycache__/test_indexer_indexer.cpython-313-pytest-8.4.1.pyc
 tests/__pycache__/test_needle_agent.cpython-313-pytest-8.4.1.pyc
 tests/__pycache__/test_summary.cpython-313-pytest-8.4.1.pyc
 .cursor/
+
+**/_pycache_/
+*.pyc
+__pycache__/
+*.gz
+*.pack
+*.dll
+
+# Node.js dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env files
+.env
+.env.local
+.env.*.local
+
+# Optional cache
+.cache/
+.next/

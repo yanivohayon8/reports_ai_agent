@@ -1,5 +1,11 @@
+import sys
+import os
 from dataclasses import dataclass
 from typing import Literal, Optional, Any
+
+# Add the backend directory to Python path
+backend_path = os.path.join(os.path.dirname(__file__), '..', '..')
+sys.path.insert(0, backend_path)
 
 from agents.summary_agent.summary import SummaryAgent
 from agents.needle_agent.needle import NeedleAgent
@@ -8,7 +14,7 @@ from retrieval.hybrid_retriever import HybridRetriever
 from langchain_core.prompts import ChatPromptTemplate
 from core.api_utils import get_llm_langchain_openai
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from indexer.faiss_indexer import FAISSIndexer
+from indexer.indexer import FAISSIndexer
 
 @dataclass
 class Classification:
@@ -54,7 +60,9 @@ class RouterAgent:
         except Exception:
             llm = None
 
-        self.summary_agent = None
+        # Initialize agents
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200) if llm is not None else None
+        self.summary_agent = SummaryAgent(text_splitter=text_splitter, llm=llm) if llm is not None else None
         # Needle agent requires an indexer; only construct if both are available
         self.needle_agent = NeedleAgent(faiss_indexer, llm) if (faiss_indexer is not None and llm is not None) else None
         self.table_agent = TableQAgent(retriever=retriever)
@@ -87,19 +95,70 @@ class RouterAgent:
         rtype = classification.type
 
         if rtype == "summary":
-            # Fallback non-LLM response for summary
-            answer = generate_response(query, Classification("fallback", "summary", "simple"), "")
+            if self.summary_agent is not None:
+                result = await self.summary_agent.handle(query)
+                return {
+                    "answer": result.get("answer", "No answer generated"),
+                    "agent": result.get("agent", f"Router → {rtype.upper()}"),
+                    "reasoning": result.get("reasoning", classification.reasoning),
+                    "type": rtype
+                }
+            else:
+                # Fallback non-LLM response for summary
+                answer = generate_response(query, Classification("fallback", "summary", "simple"), "")
+                return {
+                    "answer": answer,
+                    "agent": f"Router → {rtype.upper()}",
+                    "reasoning": classification.reasoning,
+                    "type": rtype
+                }
         elif rtype == "needle":
             if self.needle_agent is not None:
-                answer = await self.needle_agent.handle(query)
+                try:
+                    result = await self.needle_agent.handle(query)
+                    return {
+                        "answer": result.get("answer", "No answer generated"),
+                        "agent": result.get("agent", f"Router → {rtype.upper()}"),
+                        "reasoning": result.get("reasoning", classification.reasoning),
+                        "type": rtype
+                    }
+                except Exception as e:
+                    return {
+                        "answer": f"Error in needle agent: {str(e)}",
+                        "agent": f"Router → {rtype.upper()}",
+                        "reasoning": f"Agent error: {str(e)}",
+                        "type": rtype
+                    }
             else:
                 answer = generate_response(query, Classification("fallback", "needle", "simple"), "")
+                return {
+                    "answer": answer,
+                    "agent": f"Router → {rtype.upper()}",
+                    "reasoning": classification.reasoning,
+                    "type": rtype
+                }
         elif rtype == "table":
             if self.table_agent is not None:
-                answer = await self.table_agent.handle(query)
+                result = await self.table_agent.handle(query)
+                return {
+                    "answer": result.get("answer", "No answer generated"),
+                    "agent": result.get("agent", f"Router → {rtype.upper()}"),
+                    "reasoning": result.get("reasoning", classification.reasoning),
+                    "type": rtype
+                }
             else:
                 answer = "No table agent available."
+                return {
+                    "answer": answer,
+                    "agent": f"Router → {rtype.upper()}",
+                    "reasoning": classification.reasoning,
+                    "type": rtype
+                }
         else:
             answer = "I could not classify the question."
-
-        return f"[Router → {rtype.upper()}]\nReason: {classification.reasoning}\n\nAnswer: {answer}"
+            return {
+                "answer": answer,
+                "agent": f"Router → {rtype.upper()}",
+                "reasoning": classification.reasoning,
+                "type": rtype
+            }

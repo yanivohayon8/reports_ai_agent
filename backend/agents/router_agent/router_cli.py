@@ -5,10 +5,17 @@ from langchain_core.documents import Document
 
 sys.path.append("./")
 
+import sys
+import os
+
+# Add the backend directory to Python path
+backend_path = os.path.join(os.path.dirname(__file__), '..', '..')
+sys.path.insert(0, backend_path)
+
 from core.user_interface import ConsoleChat
 from agents.router_agent.router import RouterAgent
 from retrieval import DenseRetriever, SparseRetriever, HybridRetriever
-from indexer.faiss_indexer import FAISSIndexer
+from indexer.indexer import FAISSIndexer
 from core.config_utils import load_config
 from core.api_utils import get_llm_langchain_openai
 from core.pdf_reader import read_pdf  # assuming you already have this utility

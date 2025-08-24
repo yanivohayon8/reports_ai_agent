@@ -1,8 +1,15 @@
 from typing import Any, Optional
 import inspect
-from langchain.prompts import PromptTemplate
 from langchain_core.documents import Document
+import sys
+import os
+
+# Add the backend directory to Python path
+backend_path = os.path.join(os.path.dirname(__file__), '..', '..')
+sys.path.insert(0, backend_path)
+
 from retrieval.hybrid_retriever import HybridRetriever
+from .tableQA_prompts import TABLE_QA_PROMPT
 
 # Provide a lightweight local LLMChain fallback to avoid external API usage in tests
 try:
@@ -30,17 +37,9 @@ class TableQAgent:
         """
         self.retriever = retriever
 
-        self.prompt = PromptTemplate(
-            input_variables=["query", "table"],
-            template=(
-                "You are a Table Question Answering expert.\n"
-                "The user provided a question and a table.\n"
-                "Answer based only on the table content.\n\n"
-                "Question: {query}\n\n"
-                "Table:\n{table}\n\n"
-                "Answer clearly and concisely."
-            ),
-        )
+        # Use the prompt template from prompts.py
+        self.prompt = TABLE_QA_PROMPT
+        
         # Construct chain without binding to a specific external LLM
         if llm_chain is not None:
             self.chain = llm_chain
@@ -66,7 +65,7 @@ class TableQAgent:
                 return d.page_content
         return None
 
-    async def handle(self, query: str) -> str:
+    async def handle(self, query: str) -> dict:
         """
         Retrieve relevant table, then answer question.
         """
@@ -74,9 +73,18 @@ class TableQAgent:
         table_text = self._extract_table(docs)
 
         if not table_text:
-            return "No relevant table found in the documents."
+            return {
+                "answer": "No relevant table found in the documents.",
+                "agent": "Table QA Agent",
+                "reasoning": "No table data available"
+            }
 
         result = self.chain.invoke({"query": query, "table": table_text})
         if inspect.isawaitable(result):
             result = await result
-        return result["text"]
+        
+        return {
+            "answer": result["text"],
+            "agent": "Table QA Agent",
+            "reasoning": "Processed table data for analysis"
+        }

@@ -1,7 +1,7 @@
 import pathlib
 from langchain_community.document_loaders import PyPDFLoader
 from llama_parse import LlamaParse
-from core.api_utils import verify_llama_parse_api_key
+from .api_utils import verify_llama_parse_api_key
 import pandas as pd
 from io import StringIO
 from typing import List

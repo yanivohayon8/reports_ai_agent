@@ -1,0 +1,16 @@
+fastapi==0.104.1
+uvicorn==0.24.0
+python-multipart==0.0.6
+llama-parse==0.3.4
+llama-index==0.10.0
+pydantic==1.10.13
+rank-bm25==0.2.2
+langchain==0.1.0
+langchain-core==0.1.0
+langchain-community==0.1.0
+openai==0.28.1
+faiss-cpu==1.7.4
+python-dotenv==1.0.0
+requests==2.31.0
+numpy==1.24.3
+pandas==2.0.3
