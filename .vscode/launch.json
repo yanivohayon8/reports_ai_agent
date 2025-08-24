@@ -5,6 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "tableQA_chunker_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/agents/tableQA_agent/tableQA_chunker_cli.py",
+            "args": ["--pdfs-directory", "data/insurance"],
+            "console": "integratedTerminal"
+        },
+        {
             "name": "needle_chunker_cli.py",
             "type": "debugpy",
             "request": "launch",

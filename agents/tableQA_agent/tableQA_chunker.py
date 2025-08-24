@@ -6,6 +6,7 @@ import pandas as pd
 from langchain_core.language_models import BaseChatModel
 from agents.tableQA_agent.tableQA_prompts import table_summary_template
 from enum import Enum
+import json
 
 class TableChunkType:
     DESCRIPTION = "description"
@@ -26,7 +27,7 @@ class TableQAChunker:
 
             common_metadata = {}
             common_metadata["table_index"] = table_index
-            common_metadata["source"] = pdf_path
+            common_metadata["source"] = str(pdf_path)
 
             raw_chunk_metadata = common_metadata.copy()
             raw_chunk_metadata["table_chunk_type"] = TableChunkType.RAW
@@ -57,11 +58,12 @@ class TableQAChunker:
     def save(self,directory_path:Path):
         self.faiss_indexer.save(directory_path)
 
-    
-    def get_used_input(self)->dict:
-        faiss_indexer_input = self.faiss_indexer.get_used_input()
+        used_input = self.get_used_input()
+        with open(Path(directory_path,"tableQA_chunker_used_input.json"),"w") as f:
+            json.dump(used_input,f)
 
+    def get_used_input(self)->dict:
         return {
-            "faiss_indexer_input": faiss_indexer_input,
+            "faiss_indexer_input": str(self.faiss_indexer.directory_path),
             "llm": self.llm._identifying_params
         }

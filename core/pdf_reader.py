@@ -53,6 +53,8 @@ def extract_tables(pdf_path:pathlib.Path)->List[pd.DataFrame]:
     text = _read_pdf_with_html_as_text(pdf_path)
     tables = _extract_tables(text)
 
+    print(f"\tExtracted {len(tables)} tables from {pdf_path}")
+
     return tables
 
 def _read_pdf_with_html_as_text(pdf_path:pathlib.Path):

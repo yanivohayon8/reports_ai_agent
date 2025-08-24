@@ -1,0 +1,1 @@
+{"faiss_indexer_input": "vectordb_indexes\\tableQA", "llm": {"model_name": "gpt-4o-mini", "model": "gpt-4o-mini", "stream": false}}

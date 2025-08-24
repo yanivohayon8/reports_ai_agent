@@ -27,4 +27,4 @@ tests/__pycache__/test_summary.cpython-313-pytest-8.4.1.pyc
 .cursor/
 
 # Evaluation datasets - uncomment if you want to ignore generated datasets
-data/evaluation_datasets/
+#data/evaluation_datasets/
