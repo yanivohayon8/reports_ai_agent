@@ -1,5 +1,4 @@
 import pathlib
-from langchain_community.document_loaders import PyPDFLoader
 from llama_parse import LlamaParse
 from .api_utils import verify_llama_parse_api_key
 import pandas as pd
@@ -7,8 +6,8 @@ from io import StringIO
 from typing import List
 from langchain_core.documents import Document
 
-
-def read_pdf(path:pathlib.Path, format="documents"):
+def read_pdf(path:pathlib.Path, format="documents",
+                split_by_page= True):
     verify_llama_parse_api_key()
     result_type = 'markdown' 
 
@@ -21,7 +20,7 @@ def read_pdf(path:pathlib.Path, format="documents"):
         auto_mode = True,
         auto_mode_trigger_on_image_in_page = True,
         auto_mode_trigger_on_table_in_page = True,
-        split_by_page= True,
+        split_by_page=split_by_page,
         output_tables_as_HTML=True
     )
 
@@ -41,13 +40,32 @@ def read_pdf(path:pathlib.Path, format="documents"):
             metadata = {}
             metadata["source"] = str(path)
             metadata["page"] = page_index + 1
-            metadata["tables"] = _extract_tables(doc.text)
             
             langchain_documents.append(Document(page_content=doc.text,metadata= metadata))
 
         return langchain_documents
     else:
         raise ValueError(f"Format {format} not supported")
+
+
+
+def extract_tables(pdf_path:pathlib.Path)->List[pd.DataFrame]:
+    text = _read_pdf_with_html_as_text(pdf_path)
+    tables = _extract_tables(text)
+
+    print(f"\tExtracted {len(tables)} tables from {pdf_path}")
+
+    return tables
+
+def _read_pdf_with_html_as_text(pdf_path:pathlib.Path):
+    # wrapping function that enforce returning html embeddings
+    # split_by_pages is false because the possible overflow of tables between pages.
+    documents = read_pdf(pdf_path,format="documents",split_by_page=False)
+    text = documents[0].page_content
+
+    return text
+
+
 
 def _extract_tables(text:str,start_tag="<table>",end_tag="</table>")->List[pd.DataFrame]:
     if start_tag not in text:

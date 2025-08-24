@@ -5,6 +5,38 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "tableQA_chunker_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/agents/tableQA_agent/tableQA_chunker_cli.py",
+            "args": ["--pdfs-directory", "data/insurance"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "needle_chunker_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/agents/needle_agent/needle_chunker_cli.py",
+            "args": ["--pdfs-directory", "data/insurance"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "needle_evaluator_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/agents/needle_agent/needle_evaluator_cli.py",
+            "args": [],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "needle_dataset_synthesize_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/agents/needle_agent/needle_dataset_synthesize_cli.py",
+            "args": ["--pdf-directory", "data/insurance"],
+            "console": "integratedTerminal"
+        },
+        {
             "name": "router_cli.py",
             "type": "debugpy",
             "request": "launch",
@@ -13,10 +45,10 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "needle_cli.py",
+            "name": "needle_agent_cli.py",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/backend/agents/needle_agent/needle_cli.py",
+            "program": "${workspaceFolder}/agents/needle_agent/needle_agent_cli.py",
             "args": [],
             "console": "integratedTerminal"
         },
@@ -34,47 +66,6 @@
             "request": "launch",
             "program": "${workspaceFolder}/backend/indexer/indexer_cli.py",
             "args": ["--pdf-path", "data/report.pdf", "--faiss-indexer-directory", "vectordb_indexes/faiss_indexer_report"],
-            "console": "integratedTerminal"
-        },
-        /// OLD CANNOT BE USED: 
-        {
-            "name": "evaluate_batch_llm_first.py",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${workspaceFolder}/src/evaluate_batch.py",
-            "args": ["data/report.pdf","--qna-ask-llm-first","--gt", "src/questions_answers.csv","--questions", "data/questions_answers.csv","--answers-out","answers_res_y.csv"],
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "evaluate_batch.py",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${workspaceFolder}/src/evaluate_batch.py",
-            "args": ["data/report.pdf","--gt", "src/questions_answers.csv","--questions", "data/questions_answers.csv","--answers-out","answers_res_y.csv"],
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "cli_timeline.py",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${workspaceFolder}/src/tools/tools_project/cli_timeline.py",
-            "args": ["data/report.pdf", "--method", "map_reduce", "--token-based"],
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "cli_agent.py",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${workspaceFolder}/src/tools/tools_project/cli_agent.py",
-            "args": ["data/report.pdf", "--chat"],
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "qna_core.py",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${workspaceFolder}/src/tools/tools_project/qna/qna_core.py",
-            "args": ["--question", "How did Marcus Boyd gain entry into Emma’s apartment?", "data/report.pdf"],
             "console": "integratedTerminal"
         }
     ]

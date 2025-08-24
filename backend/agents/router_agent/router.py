@@ -8,8 +8,8 @@ backend_path = os.path.join(os.path.dirname(__file__), '..', '..')
 sys.path.insert(0, backend_path)
 
 from agents.summary_agent.summary import SummaryAgent
-from agents.needle_agent.needle import NeedleAgent
-from agents.tableQA_agent.tableQA import TableQAgent
+from agents.needle_agent.needle_agent import NeedleAgent
+from agents.tableQA_agent.tableQA_old import TableQAgent_old
 from retrieval.hybrid_retriever import HybridRetriever
 from langchain_core.prompts import ChatPromptTemplate
 from core.api_utils import get_llm_langchain_openai
@@ -65,7 +65,7 @@ class RouterAgent:
         self.summary_agent = SummaryAgent(text_splitter=text_splitter, llm=llm) if llm is not None else None
         # Needle agent requires an indexer; only construct if both are available
         self.needle_agent = NeedleAgent(faiss_indexer, llm) if (faiss_indexer is not None and llm is not None) else None
-        self.table_agent = TableQAgent(retriever=retriever)
+        self.table_agent = TableQAgent_old(retriever=retriever)
         
         prompt = ChatPromptTemplate.from_messages([
             ("system", "You are a router that classifies user questions and decides which specialized agent should answer."),

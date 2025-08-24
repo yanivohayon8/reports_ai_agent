@@ -1,3 +1,5 @@
+__pycache__/
+
 __pycache__/conftest.cpython-313-pytest-8.4.1.pyc
 core/__pycache__/__init__.cpython-313.pyc
 core/__pycache__/api_utils.cpython-313.pyc
@@ -24,12 +26,6 @@ tests/__pycache__/test_needle_agent.cpython-313-pytest-8.4.1.pyc
 tests/__pycache__/test_summary.cpython-313-pytest-8.4.1.pyc
 .cursor/
 
-**/_pycache_/
-*.pyc
-__pycache__/
-*.gz
-*.pack
-*.dll
 
 # Node.js dependencies
 node_modules/
@@ -52,3 +48,6 @@ pnpm-debug.log*
 # Optional cache
 .cache/
 .next/
+
+# Evaluation datasets - uncomment if you want to ignore generated datasets
+#data/evaluation_datasets/

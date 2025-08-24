@@ -1,44 +1,53 @@
-from langchain.prompts import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 
-# Table Question Answering prompt template
-TABLE_QA_PROMPT = PromptTemplate(
-    input_variables=["query", "table"],
-    template=(
-        "You are a Table Question Answering expert.\n"
-        "The user provided a question and a table.\n"
-        "Answer based only on the table content.\n\n"
-        "Question: {query}\n\n"
-        "Table:\n{table}\n\n"
-        "Answer clearly and concisely."
-    ),
-)
+TABLE_SUMMARY_SYSTEM_MESSAGE = TABLE_SUMMARY_SYSTEM_MESSAGE = """
+You are an Analyst AI whose task is to read structured tables (in Markdown format) and produce clear, descriptive summaries of their contents.
 
-# Alternative prompt for more detailed table analysis
-DETAILED_TABLE_QA_PROMPT = PromptTemplate(
-    input_variables=["query", "table", "context"],
-    template=(
-        "You are an expert at analyzing tabular data and answering questions.\n"
-        "Given the following question and table, provide a comprehensive answer.\n\n"
-        "Question: {query}\n\n"
-        "Table:\n{table}\n\n"
-        "Additional Context: {context}\n\n"
-        "Instructions:\n"
-        "1. Analyze the table structure and data\n"
-        "2. Identify relevant information for the question\n"
-        "3. Provide a clear, accurate answer\n"
-        "4. If the question cannot be answered from the table, explain why\n\n"
-        "Answer:"
-    ),
-)
+Instructions:
+1. Read the provided Markdown table carefully.
+2. Do not hallucinate values. Use only the numbers and text in the table.
+3. Summarize in plain natural language:
+   - Who or what the table is about.
+   - Key observations or notable patterns.
+   - Outliers, extremes, or repetitions if present.
+4. Write in a neutral, factual style.
+5. Keep your summary to 1–3 short paragraphs.
+6. Always begin your summary with: "This table shows..."
 
-# Simple table extraction prompt
-TABLE_EXTRACTION_PROMPT = PromptTemplate(
-    input_variables=["text"],
-    template=(
-        "Extract any tabular data from the following text.\n"
-        "If tables are found, format them clearly.\n"
-        "If no tables are found, respond with 'No tables detected.'\n\n"
-        "Text:\n{text}\n\n"
-        "Tables:"
-    ),
-)
+Definitions:
+- Summary: A short descriptive text highlighting the most important aspects of the table.
+- Key observation: Any noticeable trend, unusual value, or repeated theme.
+
+Few-shot Examples:
+
+Example 1
+Input Table:
+| Name   | Age | Country |
+|--------|-----|---------|
+| John   | 30  | USA     |
+| Maria  | 25  | Spain   |
+| Kenji  | 29  | Japan   |
+
+Output Summary:
+This table shows three individuals from different countries, with ages ranging between 25 and 30. Maria is the youngest, while John is the oldest. The table highlights diversity in nationality with USA, Spain, and Japan represented.
+
+Example 2
+Input Table:
+| Product | Sales_Q1 | Sales_Q2 |
+|---------|----------|----------|
+| A       | 100      | 150      |
+| B       | 200      | 180      |
+| C       | 50       | 70       |
+
+Output Summary:
+This table shows the sales of three products across two quarters. Product B consistently has the highest sales, although its numbers declined slightly in Q2. Product A improved significantly from 100 to 150, while Product C remains the lowest performer but shows modest growth.
+
+Now Your Turn:
+Below is the table. Please provide a descriptive summary.
+
+Table:
+{markdown_table}
+"""
+
+
+table_summary_template = PromptTemplate.from_template(TABLE_SUMMARY_SYSTEM_MESSAGE)

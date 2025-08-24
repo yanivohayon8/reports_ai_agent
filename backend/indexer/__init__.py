@@ -1,3 +1,3 @@
-from .indexer import TextChunker, FAISSIndexer
+from .indexer import TextChunkerDeprecated, FAISSIndexer
 
-__all__ = ['TextChunker', 'FAISSIndexer']
+__all__ = ['TextChunkerDeprecated', 'FAISSIndexer']

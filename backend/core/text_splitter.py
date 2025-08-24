@@ -2,6 +2,9 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 import tiktoken, re
 
 def get_text_splitter(**kwargs):
+    if kwargs.get("length_function") == "tiktoken_len":
+        kwargs["length_function"] = tiktoken_len
+
     default_kwargs = {
         "chunk_size":300,
         "chunk_overlap":50,

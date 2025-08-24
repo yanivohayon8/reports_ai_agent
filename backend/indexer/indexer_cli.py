@@ -7,7 +7,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.text_splitter import get_text_splitter
-from indexer import TextChunker,FAISSIndexer
+from indexer import TextChunkerDeprecated,FAISSIndexer
 
 
 if __name__ == "__main__":
@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
     faiss_indexer = FAISSIndexer.from_small_embedding(directory_path=faiss_indexer_directory)
     text_splitter = get_text_splitter()
-    text_chunker = TextChunker(faiss_indexer,text_splitter)
+    text_chunker = TextChunkerDeprecated(faiss_indexer,text_splitter)
 
     if args.pdf_path is not None:
         # Handle single PDF file

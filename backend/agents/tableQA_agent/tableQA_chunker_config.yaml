@@ -1,0 +1,7 @@
+"FAISSIndexer":
+  "directory_path": "vectordb_indexes/tableQA"
+  "embeddings":
+    "model": "text-embedding-3-small"
+    "dimensions": 1536
+"llm":
+  "model": "gpt-4o-mini"

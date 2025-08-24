@@ -7,8 +7,10 @@ import sys
 
 sys.path.append(str(Path(__file__).parent.parent))
 
-from indexer.indexer import FAISSIndexer,TextChunker
+from indexer.indexer import FAISSIndexer,TextChunkerDeprecated
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+from core.text_splitter import get_text_splitter
 
 def test_faiss_indexer():
     indexer = FAISSIndexer.from_small_embedding()
@@ -31,7 +33,26 @@ def test_text_chunker_chunk():
     faiss_indexer = FAISSIndexer.from_small_embedding(directory_path=faiss_indexer_directory)
     
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=300, chunk_overlap=50)
-    text_chunker = TextChunker(faiss_indexer,text_splitter)
+    text_chunker = TextChunkerDeprecated(faiss_indexer,text_splitter)
 
     pdf_path = Path("tests/data/report.pdf")
     text_chunker.chunk(pdf_path)
+
+
+def test_faiss_indexer_get_used_input():
+    faiss_indexer_directory = Path("tests","data","temp_faiss_index")
+    faiss_indexer = FAISSIndexer.from_small_embedding(directory_path=faiss_indexer_directory)
+
+    text_splitter = get_text_splitter()
+    text_chunker = TextChunkerDeprecated(faiss_indexer,text_splitter)
+
+    pdf_path = Path("tests/data/report.pdf")
+    text_chunker.chunk(pdf_path)
+    faiss_indexer.save(faiss_indexer_directory)
+
+    loaded_faiss_indexer = FAISSIndexer.from_small_embedding(directory_path=faiss_indexer_directory)
+    used_input =loaded_faiss_indexer.get_used_input()
+
+    assert not used_input is None
+
+    shutil.rmtree(faiss_indexer_directory)

@@ -1,4 +1,4 @@
-from agents.needle_agent.needle import NeedleAgent
+from agents.needle_agent.needle_agent import NeedleAgent
 from indexer.indexer import FAISSIndexer
 from core.api_utils import get_llm_langchain_openai
 
@@ -16,8 +16,20 @@ def test_agent_compiles():
 
     print("\t" + "-"*50 + "chunks" + "-"*50)
     
-    for chunk in answer["chunks"]:
+    for chunk_content,chunk_metadata in zip(answer["chunks_content"],answer["chunks_metadata"]):
         print("\t" + "-"*50 + "page_content" + "-"*50)
-        print("\t" + chunk["page_content"])
+        print("\t" + chunk_content)
         print("\t" + "-"*50 + "metadata" + "-"*50)
-        print("\t" + str(chunk["metadata"]))
+        print("\t" + str(chunk_metadata))
+
+
+def test_needle_agent_get_used_input():
+    # TODO: use a temp directory for the faiss indexer
+    faiss_indexer = FAISSIndexer.from_small_embedding(directory_path="vectordb_indexes/faiss_indexer_insurance")
+    llm = get_llm_langchain_openai(model="gpt-4o-mini")
+    needle_agent = NeedleAgent(faiss_indexer,llm)
+
+    used_input = needle_agent.get_used_input()
+
+    assert not used_input is None
+    assert isinstance(used_input,dict)
