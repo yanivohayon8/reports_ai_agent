@@ -1,2 +1,0 @@
-context_precision,context_recall,faithfulness,token_based,chunk_size,chunk_overlap,top_k,fetch_k,lambda_mult,score_threshold,use_multiquery,n_queries
-0.9499999999633332,0.32005050505050503,0.8766666666666666,True,1500,200,4,160,0.3,,True,8
