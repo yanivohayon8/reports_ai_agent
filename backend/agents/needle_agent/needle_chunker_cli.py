@@ -6,17 +6,17 @@ from pathlib import Path
 import sys
 sys.path.append(".")
 
-from indexer.indexer import FAISSIndexer
-from agents.needle_agent.needle_chunker import NeedleChunker
-from core.text_splitter import get_text_splitter
-from core.api_utils import get_openai_embeddings
-from core.config_utils import load_config
+from backend.indexer.indexer import FAISSIndexer
+from backend.agents.needle_agent.needle_chunker import NeedleChunker
+from backend.core.text_splitter import get_text_splitter
+from backend.core.api_utils import get_openai_embeddings
+from backend.core.config_utils import load_config
 
 def main():
     parser = argparse.ArgumentParser(description="Indexer CLI")
     parser.add_argument("--pdfs-directory", type=str, help="Path to the directory containing PDF files to index. Example: 'data'")
     parser.add_argument("--pdf-path", type=str, help="Path to a single PDF file to index. Example: 'data/report.pdf'")
-    parser.add_argument("--config-path", type=str, default="agents/needle_agent/needle_chunker_config.yaml")
+    parser.add_argument("--config-path", type=str, default="backend/agents/needle_agent/needle_chunker_config.yaml")
 
     args = parser.parse_args()
 
@@ -33,8 +33,7 @@ def main():
     if not faiss_indexer_directory.exists():
         os.makedirs(faiss_indexer_directory)
 
-    embeddings = get_openai_embeddings(model=config["FAISSIndexer"]["embeddings"]["model"],
-                                       dimensions=config["FAISSIndexer"]["embeddings"]["dimensions"])
+    embeddings = get_openai_embeddings(model=config["FAISSIndexer"]["embeddings"]["model"])
     faiss_indexer = FAISSIndexer(embeddings,directory_path=faiss_indexer_directory)
     text_splitter = get_text_splitter(**config["text_splitter"])
     chunker = NeedleChunker(faiss_indexer,text_splitter)

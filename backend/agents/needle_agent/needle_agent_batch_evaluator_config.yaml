@@ -1,0 +1,15 @@
+NeedleAgent:
+  llm:
+    model: gpt-4o-mini          # אפשר לשנות כאן מודל
+  indexer:
+    faiss_directory: backend/data/faiss_index
+
+Evaluator:
+  evaluator_llm: gpt-4o-mini    # מודל להערכה
+  metrics:
+    - name: faithfulness
+      threshold: 0.7
+    - name: relevance
+      threshold: 0.8
+    - name: coherence
+      threshold: 0.6

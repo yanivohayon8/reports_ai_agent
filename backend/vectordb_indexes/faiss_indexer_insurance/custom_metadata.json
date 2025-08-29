@@ -1,16 +1,1 @@
-{
-    "processed_pdfs": [
-        "pdfs\\insurance\\client1_report1_tourAndCarePolicy.pdf",
-        "pdfs\\insurance\\client2_report2_tourAndCarePolicy.pdf",
-        "pdfs\\insurance\\client3_report3_MenoraPolicy.pdf",
-        "pdfs\\insurance\\\ufffd\ufffdclient4_report4_MenoraPolicy.pdf"
-    ],
-    "text_splitter": {
-        "class_name": "RecursiveCharacterTextSplitter",
-        "params": {
-            "chunk_size": 300,
-            "chunk_overlap": 50,
-            "length_function": "tiktoken_len"
-        }
-    }
-}
+{"processed_pdfs": ["C:\\Users\\HP\\Documents\\reports_ai_agent\\backend\\data\\insurance\\client1_report1_tourAndCarePolicy.pdf", "C:\\Users\\HP\\Documents\\reports_ai_agent\\backend\\data\\insurance\\client2_report2_tourAndCarePolicy.pdf", "C:\\Users\\HP\\Documents\\reports_ai_agent\\backend\\data\\insurance\\client3_report3_MenoraPolicy.pdf", "C:\\Users\\HP\\Documents\\reports_ai_agent\\backend\\data\\insurance\\Menora_policy.pdf", "C:\\Users\\HP\\Documents\\reports_ai_agent\\backend\\data\\insurance\\tourists_policy.pdf", "C:\\Users\\HP\\Documents\\reports_ai_agent\\backend\\data\\insurance\\\ufffd\ufffdclient4_report4_MenoraPolicy.pdf"], "text_splitter": {"class_name": "RecursiveCharacterTextSplitter", "params": {"chunk_size": 300, "chunk_overlap": 50, "length_function": "tiktoken_len", "separators": ["\n## ", "\n### ", "\n- ", "\n* ", "\n\n", "\n", " ", ""]}}}

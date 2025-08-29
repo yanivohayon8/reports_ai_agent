@@ -1,0 +1,11 @@
+llm:
+  model: gpt-4o-mini
+
+chunker:
+  min_chunk_size: 800
+  max_chunk_size: 1600
+  min_chunk_overlap: 100
+  max_chunk_overlap: 300
+
+output:
+  dir: backend/data/evaluation_datasets/tableQA_agent

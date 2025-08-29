@@ -8,7 +8,7 @@
             "name": "tableQA_chunker_cli.py",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/agents/tableQA_agent/tableQA_chunker_cli.py",
+            "program": "${workspaceFolder}/backend/agents/tableQA_agent/tableQA_chunker_cli.py",
             "args": ["--pdfs-directory", "data/insurance"],
             "console": "integratedTerminal"
         },
@@ -16,15 +16,15 @@
             "name": "needle_chunker_cli.py",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/agents/needle_agent/needle_chunker_cli.py",
-            "args": ["--pdfs-directory", "data/insurance"],
+            "program": "${workspaceFolder}/backend/agents/needle_agent/needle_chunker_cli.py",
+            "args": ["--pdfs-directory", "backend/data/insurance"],
             "console": "integratedTerminal"
         },
         {
             "name": "needle_evaluator_cli.py",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/agents/needle_agent/needle_evaluator_cli.py",
+            "program": "${workspaceFolder}/backend/agents/needle_agent/needle_evaluator_cli.py",
             "args": [],
             "console": "integratedTerminal"
         },
@@ -32,8 +32,8 @@
             "name": "needle_dataset_synthesize_cli.py",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/agents/needle_agent/needle_dataset_synthesize_cli.py",
-            "args": ["--pdf-directory", "data/insurance"],
+            "program": "${workspaceFolder}/backend/agents/needle_agent/needle_dataset_synthesize_cli.py",
+            "args": ["--pdf-directory", "backend/data/insurance", "--output-path", "backend/data/evaluation_datasets/needle_agent/client2_report2_tourAndCarePolicy_large.jsonl"],
             "console": "integratedTerminal"
         },
         {
@@ -48,7 +48,7 @@
             "name": "needle_agent_cli.py",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/agents/needle_agent/needle_agent_cli.py",
+            "program": "${workspaceFolder}/backend/agents/needle_agent/needle_agent_cli.py",
             "args": [],
             "console": "integratedTerminal"
         },
@@ -57,7 +57,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/backend/indexer/indexer_cli.py",
-            "args": ["--directory","data/insurance", "--faiss-indexer-directory", "vectordb_indexes/faiss_indexer_insurance"],
+            "args": ["--directory","backend/data/insurance", "--faiss-indexer-directory", "backend/vectordb_indexes/faiss_indexer_insurance"],
             "console": "integratedTerminal"
         },
         {
@@ -65,8 +65,143 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/backend/indexer/indexer_cli.py",
-            "args": ["--pdf-path", "data/report.pdf", "--faiss-indexer-directory", "vectordb_indexes/faiss_indexer_report"],
+            "args": ["--pdf-path", "backend/data/insurance/client1_report1_tourAndCarePolicy.pdf", "--faiss-indexer-directory", "backend/vectordb_indexes/faiss_indexer_report"],
             "console": "integratedTerminal"
+        }, 
+        {
+            "name": "needle_agent_batch_evaluator_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/agents/needle_agent/needle_agent_batch_evaluator_cli.py",
+            "args": [],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "summary_chunker_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/agents/summary_agent/summary_chunker_cli.py",
+            "args": ["--pdfs-directory", "backend/data/insurance"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "summary_dataset_evaluator_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/agents/summary_agent/summary_dataset_evaluator_cli.py",
+            "args": ["--dataset-path", "backend/data/evaluation_datasets/summary_agent/client2_report2_tourAndCarePolicy.jsonl"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "summary_agent_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/agents/summary_agent/summary_agent_cli.py",
+            "args": ["--pdf", "backend/data/insurance/client2_report2_tourAndCarePolicy.pdf", "--method", "map_reduce", "--query", "What is the policy number?", "--config", "backend/agents/summary_agent/config.yaml" ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "summary_dataset_synthesizer_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/agents/summary_agent/summary_dataset_synthesizer_cli.py",
+            "args": ["--pdf-path", "backend/data/insurance/client2_report2_tourAndCarePolicy.pdf", "--n-chunks", "10"],
+            "console": "integratedTerminal"
+        }, 
+        {
+            "name": "GraphIndexer Build & Save",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/indexer/graph_indexer_cli.py",
+            "args": [
+                "--directory", "backend/data/insurance",
+                "--graph-index-name", "insurance_graph",
+                "--save-path", "backend/vectordb_indexes/insurance_graph"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "GraphIndexer Load & Query",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/indexer/graph_indexer_cli.py",
+            "args": [
+                "--load-path", "backend/vectordb_indexes/insurance_graph",
+                "--query", "What is the coverage for Extended Physiotherapy?"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "NetworkX Build & Save",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/indexer/networkx_indexer_cli.py",
+            "args": [
+                "--directory", "backend/data/insurance",
+                "--graph-name", "insurance_graph",
+                "--save-path", "backend/vectordb_indexes/insurance_graph.gpickle"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "NetworkX Load & Query",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/indexer/networkx_indexer_cli.py",
+            "args": [
+                "--load-path", "backend/vectordb_indexes/insurance_graph.gpickle",
+                "--query-node", "client1_report1_tourAndCarePolicy_chunk_0",
+                "--depth", "2",
+                "--visualize"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "NetworkX Load & Query + Visualize",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/indexer/networkx_indexer_cli.py",
+            "args": [
+                "--load-path", "backend/vectordb_indexes/insurance_graph.gpickle",
+                "--query-node", "client1_report1_tourAndCarePolicy_chunk_0",
+                "--depth", "2",
+                "--visualize"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "NetworkX Load & Query + Visualize Subgraph",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/indexer/networkx_indexer_cli.py",
+            "args": [
+                "--load-path", "backend/vectordb_indexes/insurance_graph.gpickle",
+                "--query-node", "client1_report1_tourAndCarePolicy_chunk_0",
+                "--depth", "2",
+                "--visualize",
+                "--visualize-path", "backend/vectordb_indexes/subgraph.png"
+            ],
+            "console": "integratedTerminal"
+        }, 
+        {
+            "name": "GraphIndexer Load & Query (with Sources)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/indexer/graph_indexer_cli.py",
+            "args": [
+              "--load-path", "backend/vectordb_indexes/insurance_graph",
+              "--query", "who is the witness in ALExs accident?"
+            ],
+            "console": "integratedTerminal"
+          },
+        {
+            "name": "needle_graph_evaluator_cli.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/agents/needle_agent/needle_graph_evaluator_cli.py",
+            "args": [],
+            "console": "integratedTerminal"
+
         }
-    ]
+]
 }

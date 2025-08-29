@@ -4,12 +4,12 @@ from langchain_core.documents import Document
 import sys
 import os
 
-# Add the backend directory to Python path
+from retrieval.hybrid_retriever import HybridRetriever
+from agents.tableQA_agent.tableQA_prompts import TABLE_QA_PROMPT
+
+# Add the backend directory to Python path after imports
 backend_path = os.path.join(os.path.dirname(__file__), '..', '..')
 sys.path.insert(0, backend_path)
-
-from retrieval.hybrid_retriever import HybridRetriever
-from .tableQA_prompts import TABLE_QA_PROMPT
 
 # Provide a lightweight local LLMChain fallback to avoid external API usage in tests
 try:

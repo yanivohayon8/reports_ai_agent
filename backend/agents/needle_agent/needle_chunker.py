@@ -1,8 +1,10 @@
+import sys
+import os
 from indexer.indexer import FAISSIndexer
 from pathlib import Path
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
-from core.pdf_reader import read_pdf
+from backend.core.pdf_reader import read_pdf
 
 class NeedleChunker:
     def __init__(self, faiss_indexer:FAISSIndexer,text_splitter:RecursiveCharacterTextSplitter):

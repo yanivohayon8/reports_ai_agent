@@ -7,25 +7,29 @@ from langchain_community.vectorstores import FAISS
 from langchain_community.docstore.in_memory import InMemoryDocstore
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from core.api_utils import get_openai_embeddings
-from core.pdf_reader import read_pdf
+import os
 import json
 
+# Add the project root to Python path for direct execution
+project_root = os.path.join(os.path.dirname(__file__), '..', '..')
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 
-class FAISSIndexer():
+from backend.indexer.base_indexer import BaseIndexer
+from backend.core.api_utils import get_openai_embeddings
+from backend.core.pdf_reader import read_pdf
+
+
+class FAISSIndexer(BaseIndexer):
     """
     A simple FAISS indexer using OpenAI embeddings.
     Supports loading existing databases or creating new ones.
     """
     
     @classmethod
-    def from_small_embedding(cls,embedding_model_name:str="text-embedding-3-small",directory_path:str=None, # type: ignore
-                             dimension:int=1536):
-        embeddings = get_openai_embeddings(model=embedding_model_name,dimension=dimension)
+    def from_small_embedding(cls,embedding_model_name:str="text-embedding-3-small",directory_path:str=None): # type: ignore
+        embeddings = get_openai_embeddings(model=embedding_model_name)
 
         return cls(embeddings,directory_path)
 
@@ -92,15 +96,38 @@ class FAISSIndexer():
         self._save_metadata(os.path.join(Path(directory_path),"custom_metadata.json"))
 
     def _save_metadata(self,file_path:Path):
+        # Ensure the metadata directory exists before writing
+        try:
+            file_path.parent.mkdir(parents=True, exist_ok=True)
+        except Exception:
+            pass
         with open(file_path,"w") as f:
             json.dump(self.metadata,f)
     
     def _get_metadata_file_path(self)->Path:
         return Path(self.directory_path,"custom_metadata.json")
 
-    def audit_processed_pdf(self,pdf_path:Path):
-        self.metadata.setdefault("processed_pdfs",[])
-        self.metadata["processed_pdfs"].append(str(pdf_path))
+    def audit_processed_pdf(self, pdf_path: Path):
+        """
+        Add the processed PDF path into metadata.
+        Ensures the 'processed_pdfs' key exists and avoids duplicates.
+        """
+        # ensure the key exists
+        if "processed_pdfs" not in self.metadata:
+            self.metadata["processed_pdfs"] = []
+
+        # always save the path as a full string (absolute path)
+        pdf_str = str(Path(pdf_path).resolve())
+
+        if pdf_str not in self.metadata["processed_pdfs"]:
+            self.metadata["processed_pdfs"].append(pdf_str)
+
+        # save immediately to custom_metadata.json to avoid losing between runs
+        try:
+            self._save_metadata(Path(self.directory_path) / "custom_metadata.json")
+        except Exception as e:
+            print(f"Warning: Failed to save metadata audit for {pdf_str} ({e})")
+
 
     def audit_splitter(self,text_splitter:RecursiveCharacterTextSplitter):
         self.metadata.setdefault("text_splitter",{})
@@ -112,12 +139,33 @@ class FAISSIndexer():
             "length_function": text_splitter._length_function.__name__,
             "separators": text_splitter._separators
             # TODO: make this more dynamic? 
+            
+            
         }
 
+    
     def get_used_input(self)->dict:
-        self._load_metadata()
-        
+        """
+        Always return a dict with metadata.
+        If no metadata file exists yet, return a default structure.
+        """
+        try:
+            self._load_metadata()
+        except FileNotFoundError:
+            self.metadata = {
+                "directory_path": self.directory_path,
+                "embedding_model": getattr(self.embedding_model, "model", "unknown"),
+                "processed_pdfs": [],
+                "text_splitter": {}
+            }
+        except Exception as e:
+            self.metadata = {
+                "directory_path": self.directory_path,
+                "embedding_model": getattr(self.embedding_model, "model", "unknown"),
+                "error": f"Failed to load metadata: {str(e)}"
+            }
         return self.metadata
+
 
     def _load_metadata(self):
         file_path = self._get_metadata_file_path()
@@ -167,3 +215,8 @@ class TextChunkerDeprecated():
     
     def save(self,faiss_indexer_directory:Path):
         self.faiss_indexer.save(faiss_indexer_directory)
+        
+        
+        
+        
+

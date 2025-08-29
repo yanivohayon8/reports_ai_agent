@@ -1,0 +1,23 @@
+SummaryAgent:
+  llm:
+    model: gpt-4o-mini
+  indexer:
+    faiss_directory: backend/vectordb_indexes/summary/
+  chunker:
+    chunk_size: 1200
+    chunk_overlap: 200
+    separators:
+      - "\n\n"
+      - "\n"
+      - " "
+      - ""
+
+# ragas metrics names to enable explicitly; leave empty to let evaluator decide
+metrics:
+  - Faithfulness
+  - LLMContextRecall
+  - LLMContextPrecisionWithReference
+
+evaluator:
+  llm:
+    model: gpt-4o-mini

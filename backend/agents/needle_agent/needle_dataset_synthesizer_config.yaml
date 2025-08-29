@@ -1,5 +1,5 @@
 "model": "gpt-4o-mini"
-"n_chunks": 10
+"n_chunks": 5
 "min_chunk_size": 100
 "max_chunk_size": 400
 "min_chunk_overlap": 20

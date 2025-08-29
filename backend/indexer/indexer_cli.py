@@ -4,10 +4,15 @@ import glob
 from pathlib import Path
 
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import os
 
-from core.text_splitter import get_text_splitter
+# Add the backend directory to Python path
+backend_path = os.path.join(os.path.dirname(__file__), '..')
+sys.path.insert(0, backend_path)
+
+from backend.core.text_splitter import get_text_splitter
 from indexer import TextChunkerDeprecated,FAISSIndexer
+from backend.indexer.graph_indexer import GraphIndexer
 
 
 if __name__ == "__main__":
@@ -15,6 +20,8 @@ if __name__ == "__main__":
     parser.add_argument("--directory", type=str, help="Path to the directory containing PDF files to index. Example: 'data'")
     parser.add_argument("--pdf-path", type=str, help="Path to a single PDF file to index. Example: 'data/report.pdf'")
     parser.add_argument("--faiss-indexer-directory", type=str, required=True, help="Path to the FAISS indexer directory. Example: 'vectordb_indexes/faiss_indexer'")
+    parser.add_argument("--build-graph", action="store_true", help="Also build/update Graph RAG from the same docs")
+    parser.add_argument("--graph-index-name", type=str, default="default", help="Name for the graph child index")
 
     args = parser.parse_args()
 
@@ -33,6 +40,8 @@ if __name__ == "__main__":
     text_splitter = get_text_splitter()
     text_chunker = TextChunkerDeprecated(faiss_indexer,text_splitter)
 
+    collected_chunks = []
+
     if args.pdf_path is not None:
         # Handle single PDF file
         pdf_path = Path(args.pdf_path)
@@ -41,6 +50,12 @@ if __name__ == "__main__":
         
         print(f"Processing single PDF: {pdf_path}")
         text_chunker.chunk(pdf_path)
+        # For graph ingestion, reuse FAISS chunks
+        from backend.core.pdf_reader import read_pdf
+        from langchain_text_splitters import RecursiveCharacterTextSplitter
+        splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200, separators=["\n\n","\n"," ",""])
+        pages = read_pdf(pdf_path, format="documents")
+        collected_chunks.extend(splitter.split_documents(pages))
     
     elif args.directory is not None:
         # Handle directory of PDF files
@@ -66,6 +81,20 @@ if __name__ == "__main__":
             pdf_path = Path(pdf_file)
             print(f"Processing PDF: {pdf_path}")
             text_chunker.chunk(pdf_path)
+            from backend.core.pdf_reader import read_pdf
+            from langchain_text_splitters import RecursiveCharacterTextSplitter
+            splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200, separators=["\n\n","\n"," ",""])
+            pages = read_pdf(pdf_path, format="documents")
+            collected_chunks.extend(splitter.split_documents(pages))
     
     text_chunker.save(faiss_indexer_directory)
     print("Indexing completed successfully!")
+
+    if args.build_graph:
+        try:
+            graph = GraphIndexer()
+            graph.add_langchain_documents(collected_chunks, args.graph_index_name)
+            graph.build_graph()
+            print("Graph RAG built successfully")
+        except Exception as e:
+            print(f"Graph RAG build failed: {e}")

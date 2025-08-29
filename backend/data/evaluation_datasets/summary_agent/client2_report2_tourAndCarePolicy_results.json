@@ -1,0 +1,1 @@
+{"results": {"mean_scores": {"faithfulness": 0.9292676134781398, "context_recall": 1.0, "llm_context_precision_with_reference": 0.9999999999}}, "agent_input": {"text_splitter_config": {"chunk_size": 1200, "chunk_overlap": 200}, "llm_model": {"model_name": "gpt-4o-mini", "model": "gpt-4o-mini", "stream": false}}}

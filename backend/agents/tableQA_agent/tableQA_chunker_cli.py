@@ -4,12 +4,14 @@ import glob
 from pathlib import Path
 
 import sys
-sys.path.append(".")
+# Add the backend directory to Python path
+backend_path = os.path.join(os.path.dirname(__file__), '..', '..')
+sys.path.insert(0, backend_path)
 
 from indexer.indexer import FAISSIndexer
-from agents.tableQA_agent.tableQA_chunker import TableQAChunker
-from core.api_utils import get_openai_embeddings,get_llm_langchain_openai
-from core.config_utils import load_config
+from backend.agents.tableQA_agent.tableQA_chunker import TableQAChunker
+from backend.core.api_utils import get_openai_embeddings,get_llm_langchain_openai
+from backend.core.config_utils import load_config
 
 def main():
     parser = argparse.ArgumentParser(description="TableQA Chunker CLI")
@@ -32,8 +34,7 @@ def main():
     if not faiss_indexer_directory.exists():
         os.makedirs(faiss_indexer_directory)
 
-    embeddings = get_openai_embeddings(model=config["FAISSIndexer"]["embeddings"]["model"],
-                                       dimensions=config["FAISSIndexer"]["embeddings"]["dimensions"])
+    embeddings = get_openai_embeddings(model=config["FAISSIndexer"]["embeddings"]["model"])
     faiss_indexer = FAISSIndexer(embeddings,directory_path=faiss_indexer_directory)
     llm = get_llm_langchain_openai(model=config["llm"]["model"])
     chunker = TableQAChunker(faiss_indexer,llm)

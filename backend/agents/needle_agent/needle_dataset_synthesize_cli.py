@@ -1,5 +1,9 @@
 import sys
-sys.path.append(".")
+import os
+
+# Add the backend directory to Python path
+backend_path = os.path.join(os.path.dirname(__file__), '..', '..')
+sys.path.insert(0, backend_path)
 
 from core.api_utils import get_llm_langchain_openai
 from pathlib import Path
@@ -11,7 +15,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--pdf-path", type=str)
     parser.add_argument("--pdf-directory", type=str)
-    parser.add_argument("--config-path", type=str, default="agents/needle_agent/needle_dataset_synthesizer_config.yaml")
+    parser.add_argument("--config-path", type=str, default="backend/agents/needle_agent/needle_dataset_synthesizer_config.yaml")
     parser.add_argument("--output-path", type=str, help="Output path for the dataset. If not provided, will use timestamped filename in data/evaluation_datasets/needle_agent/")
     args = parser.parse_args()
 

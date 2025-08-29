@@ -1,8 +1,15 @@
+import sys
+import os
+
+# Add the backend directory to Python path
+backend_path = os.path.join(os.path.dirname(__file__), '..', '..')
+sys.path.insert(0, backend_path)
+
 from indexer.indexer import FAISSIndexer
 from typing import List
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.documents import Document
-from agents.needle_agent.needle_prompts import generation_prompt_template
+from backend.agents.needle_agent.needle_prompts import generation_prompt_template
 
 
 class NeedleAgent():
@@ -11,13 +18,20 @@ class NeedleAgent():
         self.faiss_indexer = faiss_indexer
         self.llm = llm
         
-    async def handle(self, query: str) -> str:
+    async def handle(self, query: str) -> dict:
         """
         Adapter for RouterAgent.
-        Returns only the answer (without debug info).
+        Returns structured response with answer and metadata.
         """
         result = self.answer(query)
-        return result["answer"]
+        return {
+            "answer": result["answer"],
+            #chunks": result.get("chunks", []),
+            #chunks_content": result.get("chunks_content", []),
+            #chunks_metadata": result.get("chunks_metadata", []),
+            "agent": "Needle Agent",
+            "reasoning": "Direct fact lookup from documents"
+        }
 
 
     def answer(self, query:str)->dict:

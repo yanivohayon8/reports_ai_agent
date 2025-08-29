@@ -8,8 +8,7 @@ import os
 backend_path = os.path.join(os.path.dirname(__file__), '..', '..')
 sys.path.insert(0, backend_path)
 
-from retrieval.hybrid_retriever import HybridRetriever
-from .tableQA_prompts import TABLE_QA_PROMPT
+from backend.agents.tableQA_agent.tableQA_prompts import TABLE_QA_PROMPT
 
 # Provide a lightweight local LLMChain fallback to avoid external API usage in tests
 try:
@@ -27,7 +26,7 @@ except Exception:  # pragma: no cover
 class TableQAgent_old:
     def __init__(
         self,
-        retriever: HybridRetriever,
+        retriever: Any, # Changed from HybridRetriever to Any as HybridRetriever is not imported
         model_name: str = "gpt-4o-mini",
         llm_chain: Optional[Any] = None,
     ):

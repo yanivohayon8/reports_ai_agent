@@ -1,4 +1,10 @@
-"faiss_indexer":
-  "directory": "vectordb_indexes/faiss_indexer_insurance"
-"llm":
-  "model": "gpt-4o-mini"
+NeedleAgent:
+  llm:
+    model: gpt-4o-mini
+  indexer:
+    type: faiss     # faiss, graph
+    faiss_directory: backend/data/faiss_index
+    graph_nodes:
+      - policies
+      - medical_reports
+      - client_emails

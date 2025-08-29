@@ -1,0 +1,8 @@
+chunker:
+  chunk_size: 1000
+  chunk_overlap: 200
+
+output:
+  dir: backend/data/evaluation_datasets/router_agent
+
+

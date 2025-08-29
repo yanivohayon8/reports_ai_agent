@@ -1,5 +1,5 @@
 "FAISSIndexer":
-  "directory_path": "vectordb_indexes/needle"
+  "directory_path": "backend/vectordb_indexes/needle"
   "embeddings":
     "model": "text-embedding-3-small"
     "dimensions": 1536

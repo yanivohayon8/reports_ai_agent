@@ -1,0 +1,22 @@
+{
+  "indices": {
+    "insurance_graph:client1_report1_tourAndCarePolicy": "backend/vectordb_indexes/insurance_graph\\insurance_graph_client1_report1_tourAndCarePolicy",
+    "insurance_graph:client2_report2_tourAndCarePolicy": "backend/vectordb_indexes/insurance_graph\\insurance_graph_client2_report2_tourAndCarePolicy",
+    "insurance_graph:client3_report3_MenoraPolicy": "backend/vectordb_indexes/insurance_graph\\insurance_graph_client3_report3_MenoraPolicy",
+    "insurance_graph:Menora_policy": "backend/vectordb_indexes/insurance_graph\\insurance_graph_Menora_policy",
+    "insurance_graph:tourists_policy": "backend/vectordb_indexes/insurance_graph\\insurance_graph_tourists_policy",
+    "insurance_graph:\ufffd\ufffdclient4_report4_MenoraPolicy": "backend/vectordb_indexes/insurance_graph\\insurance_graph_\ufffd\ufffdclient4_report4_MenoraPolicy"
+  },
+  "meta": {
+    "type": "graph",
+    "nodes": 327,
+    "indices": [
+      "insurance_graph:client1_report1_tourAndCarePolicy",
+      "insurance_graph:client2_report2_tourAndCarePolicy",
+      "insurance_graph:client3_report3_MenoraPolicy",
+      "insurance_graph:Menora_policy",
+      "insurance_graph:tourists_policy",
+      "insurance_graph:\ufffd\ufffdclient4_report4_MenoraPolicy"
+    ]
+  }
+}

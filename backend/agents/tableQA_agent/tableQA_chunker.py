@@ -1,10 +1,17 @@
+import sys
+import os
+
+# Add the backend directory to Python path
+backend_path = os.path.join(os.path.dirname(__file__), '..', '..')
+sys.path.insert(0, backend_path)
+
 from indexer.indexer import FAISSIndexer
 from pathlib import Path
 from langchain_core.documents import Document
-from core.pdf_reader import extract_tables
+from backend.core.pdf_reader import extract_tables
 import pandas as pd
 from langchain_core.language_models import BaseChatModel
-from agents.tableQA_agent.tableQA_prompts import table_summary_template
+from backend.agents.tableQA_agent.tableQA_prompts import table_summary_template
 from enum import Enum
 import json
 

@@ -1,0 +1,1 @@
+{"processed_pdfs": ["C:\\Users\\HP\\Documents\\reports_ai_agent\\backend\\data\\insurance\\client2_report2_tourAndCarePolicy.pdf"], "text_splitter": {"class_name": "RecursiveCharacterTextSplitter", "params": {"chunk_size": 1200, "chunk_overlap": 200, "length_function": "len", "separators": ["\n\n", "\n", " ", ""]}}}

@@ -1,0 +1,14 @@
+SummaryAgent:
+  llm:
+    model: gpt-4o-mini
+  indexer:
+    type: faiss
+    faiss_directory: backend/data/summary_faiss_index
+  chunker:
+    chunk_size: 1200
+    chunk_overlap: 200
+    separators:
+      - "\n\n"
+      - "\n"
+      - " "
+      - ""

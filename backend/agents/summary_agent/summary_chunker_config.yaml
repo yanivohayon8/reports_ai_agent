@@ -1,0 +1,13 @@
+FAISSIndexer:
+  directory_path: backend/vectordb_indexes/summary/
+  embeddings:
+    model: text-embedding-3-large
+
+chunker:
+  chunk_size: 1200
+  chunk_overlap: 200
+  separators:
+    - "\n\n"
+    - "\n"
+    - " "
+    - ""

@@ -1,3 +1,3 @@
-from .dense_retriever import DenseRetriever
-from .sparse_retriever import SparseRetriever
-from .hybrid_retriever import HybridRetriever
+from retrieval.dense_retriever import DenseRetriever
+from retrieval.sparse_retriever import SparseRetriever
+from retrieval.hybrid_retriever import HybridRetriever

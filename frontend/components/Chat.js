@@ -89,7 +89,9 @@ const Chat = ({ timestamp }) => {
           sender: 'ai',
           timestamp: new Date(),
           agent: data.agent || 'AI Assistant',
-          reasoning: data.reasoning || 'Response generated'
+          reasoning: data.reasoning || 'Response generated',
+          responseType: data.response_type || 'text',
+          tableData: data.table_data || null
         };
         setMessages(prev => [...prev, aiMessage]);
       } else {
@@ -312,6 +314,13 @@ const Chat = ({ timestamp }) => {
                       <div className="whitespace-pre-wrap break-words text-sm leading-relaxed font-medium">
                         {message.text}
                       </div>
+                      
+                      {/* Render table if this is a table response */}
+                      {message.responseType === 'table' && message.tableData && (
+                        <div className="mt-4">
+                          <TableRenderer tableData={message.tableData} isDarkTheme={isDarkTheme} />
+                        </div>
+                      )}
                       <div className={`text-xs mt-3 font-medium ${themeStyles.timestamp}`}>
                         {formatTime(message.timestamp)}
                       </div>
@@ -537,6 +546,29 @@ const Chat = ({ timestamp }) => {
                     </div>
                   )}
 
+                  {/* Beautiful Table Visualization (Modal) */}
+                  {selectedMessage.responseType === 'table' && selectedMessage.tableData && (
+                    <div className={`rounded-2xl p-6 border ${
+                      isDarkTheme 
+                        ? 'bg-gray-700/50 border-gray-600/50' 
+                        : 'bg-slate-50/80 border-slate-200/50'
+                    }`}>
+                      <div className="flex items-center space-x-3 mb-4">
+                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-lg font-bold shadow-lg border border-blue-300/30">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                          </svg>
+                        </div>
+                        <h4 className={`text-lg font-semibold ${isDarkTheme ? 'text-white' : 'text-slate-800'}`} style={{ fontFamily: 'cursive, serif' }}>
+                          Table Visualization
+                        </h4>
+                      </div>
+                      <div className="mt-2">
+                        <TableRenderer tableData={selectedMessage.tableData} isDarkTheme={isDarkTheme} />
+                      </div>
+                    </div>
+                  )}
+
                   {/* Process Flow Visualization */}
                   <div className={`rounded-2xl p-6 border ${
                     isDarkTheme 
@@ -626,6 +658,108 @@ const Chat = ({ timestamp }) => {
           </motion.div>
         )}
       </AnimatePresence>
+    </div>
+  );
+};
+
+// Table Renderer Component
+const TableRenderer = ({ tableData, isDarkTheme }) => {
+  if (tableData.error) {
+    return (
+      <div className={`rounded-xl p-4 border-2 ${isDarkTheme ? 'bg-yellow-900/10 border-yellow-500/30' : 'bg-yellow-50 border-yellow-200'}`}>
+        <div className="flex items-center space-x-3">
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isDarkTheme ? 'bg-yellow-600/30 text-yellow-300' : 'bg-yellow-100 text-yellow-600'}`}>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <p className={`text-sm font-medium ${isDarkTheme ? 'text-yellow-200' : 'text-yellow-700'}`}>
+              Table data not available
+            </p>
+            <p className={`text-xs ${isDarkTheme ? 'text-yellow-300/70' : 'text-yellow-600/70'}`}>
+              The AI provided a text response instead of structured table data
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // If we have parsed tables, render them
+  if (tableData.parsed_tables && tableData.parsed_tables.length > 0) {
+    return (
+      <div className="space-y-6">
+        {tableData.parsed_tables.map((table, index) => (
+          <div key={index} className={`rounded-2xl border-2 overflow-hidden shadow-xl ${isDarkTheme ? 'border-blue-500/30 bg-gray-800/50' : 'border-blue-200 bg-white/80'}`}>
+            {/* Enhanced Table Header */}
+            <div className={`px-6 py-4 border-b-2 ${isDarkTheme ? 'bg-gradient-to-r from-blue-600/20 to-purple-600/20 border-blue-500/30' : 'bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200'}`}>
+              <div className="flex items-center justify-between">
+                <h4 className={`text-lg font-bold ${isDarkTheme ? 'text-white' : 'text-gray-800'}`}>
+                  📊 Data Table
+                </h4>
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${isDarkTheme ? 'bg-blue-600/30 text-blue-200 border border-blue-500/50' : 'bg-blue-100 text-blue-700 border border-blue-200'}`}>
+                  {table.type.toUpperCase()}
+                </span>
+              </div>
+            </div>
+            
+            {/* Enhanced Table Content */}
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className={`${isDarkTheme ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
+                  <tr>
+                    {table.headers.map((header, headerIndex) => (
+                      <th key={headerIndex} className={`px-6 py-4 text-left text-sm font-bold ${isDarkTheme ? 'text-blue-200 border-gray-600' : 'text-blue-700 border-gray-200'} border-r last:border-r-0 uppercase tracking-wide`}>
+                        {header}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {table.rows.map((row, rowIndex) => (
+                    <tr key={rowIndex} className={`${rowIndex % 2 === 0 ? (isDarkTheme ? 'bg-gray-700/30' : 'bg-white') : (isDarkTheme ? 'bg-gray-800/30' : 'bg-gray-50')} hover:${isDarkTheme ? 'bg-blue-600/20' : 'bg-blue-50'} transition-all duration-200 group`}>
+                      {table.headers.map((header, headerIndex) => (
+                        <td key={headerIndex} className={`px-6 py-4 text-sm font-medium ${isDarkTheme ? 'text-gray-200 border-gray-600' : 'text-gray-700 border-gray-200'} border-r last:border-r-0 group-hover:${isDarkTheme ? 'text-white' : 'text-gray-900'}`}>
+                          {row[header] || '-'}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            
+            {/* Table Footer */}
+            <div className={`px-6 py-3 ${isDarkTheme ? 'bg-gray-800/30 border-t border-gray-600/30' : 'bg-gray-50 border-t border-gray-200'}`}>
+              <div className="flex items-center justify-between text-xs">
+                <span className={`${isDarkTheme ? 'text-gray-400' : 'text-gray-500'}`}>
+                  {table.rows.length} row{table.rows.length !== 1 ? 's' : ''} • {table.headers.length} column{table.headers.length !== 1 ? 's' : ''}
+                </span>
+                <span className={`${isDarkTheme ? 'text-blue-300' : 'text-blue-600'}`}>
+                  ✓ Parsed successfully
+                </span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // Fallback: show raw content
+  return (
+    <div className={`rounded-lg border ${isDarkTheme ? 'border-gray-600' : 'border-gray-200'}`}>
+      <div className={`px-4 py-3 border-b ${isDarkTheme ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-200'}`}>
+        <h4 className={`font-semibold ${isDarkTheme ? 'text-white' : 'text-gray-800'}`}>
+          Raw Table Data
+        </h4>
+      </div>
+      <div className={`p-4 ${isDarkTheme ? 'bg-gray-800' : 'bg-white'}`}>
+        <pre className={`text-sm whitespace-pre-wrap ${isDarkTheme ? 'text-gray-200' : 'text-gray-700'}`}>
+          {tableData.raw_content}
+        </pre>
+      </div>
     </div>
   );
 };

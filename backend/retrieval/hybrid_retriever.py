@@ -1,3 +1,10 @@
+import sys
+import os
+
+# Add the backend directory to Python path
+backend_path = os.path.join(os.path.dirname(__file__), '..')
+sys.path.insert(0, backend_path)
+
 from typing import List
 from langchain_core.documents import Document
 from retrieval.dense_retriever import DenseRetriever

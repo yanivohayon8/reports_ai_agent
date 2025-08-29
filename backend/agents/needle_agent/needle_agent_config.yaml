@@ -1,4 +1,4 @@
 "faiss_indexer":
-  "directory": "vectordb_indexes/faiss_indexer_insurance"
+  "directory": "backend/vectordb_indexes/faiss_indexer_insurance"
 "llm":
   "model": "gpt-4o-mini"

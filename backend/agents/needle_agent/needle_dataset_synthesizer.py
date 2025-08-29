@@ -1,3 +1,10 @@
+import sys
+import os
+
+# Add the backend directory to Python path
+backend_path = os.path.join(os.path.dirname(__file__), '..', '..')
+sys.path.insert(0, backend_path)
+
 from core.pdf_reader import read_pdf
 from core.text_splitter import get_text_splitter
 import random

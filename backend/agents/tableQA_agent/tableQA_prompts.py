@@ -51,3 +51,17 @@ Table:
 
 
 table_summary_template = PromptTemplate.from_template(TABLE_SUMMARY_SYSTEM_MESSAGE)
+
+# Table QA prompt for answering questions about tables
+TABLE_QA_PROMPT = PromptTemplate.from_template("""
+You are an AI assistant specialized in answering questions about tabular data.
+
+Given a table and a question, provide a clear and accurate answer based only on the information in the table.
+
+Table:
+{table}
+
+Question: {query}
+
+Answer the question based on the table data above. If the question cannot be answered with the given table, say so clearly.
+""")

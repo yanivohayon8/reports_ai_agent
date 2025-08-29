@@ -1,4 +1,31 @@
-"faiss_indexer":
-  "directory": "vectordb_indexes/faiss_indexer_insurance"
-"llm":
-  "model": "gpt-4o-mini"
+SummaryAgent:
+  type: graph
+  llm:
+    model: gpt-4o-mini
+  indexer:
+    faiss_directory: backend/vectordb_indexes/faiss_indexer_insurance
+  chunker:
+    chunk_size: 1000
+    chunk_overlap: 200
+    separators:
+      - "\n\n"
+      - "\n"
+      - " "
+      - ""
+
+NeedleAgent:
+  type: graph
+  llm:
+    model: gpt-4o-mini
+  indexer:
+    faiss_directory: backend/vectordb_indexes/faiss_indexer_insurance
+
+TableQAgent:
+  llm:
+    model: gpt-4o-mini
+  indexer:
+    faiss_directory: backend/vectordb_indexes/tableQA
+
+GraphRAG:
+  enabled: true
+  directory: backend/vectordb_indexes/insurance_graph

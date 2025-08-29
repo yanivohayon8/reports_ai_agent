@@ -2,10 +2,10 @@
   "llm":
     "model": "gpt-4o-mini"
   "indexer":
-    "faiss_directory": "vectordb_indexes/faiss_indexer_insurance"
+    "faiss_directory": "backend/vectordb_indexes/faiss_indexer_insurance"
 "Dataset":
-  "ground_truth_dataset_path": "data/evaluation_datasets/needle_agent/client2_report2_tourAndCarePolicy.jsonl"
+  "ground_truth_dataset_path": "backend/data/evaluation_datasets/needle_agent/client3_report3_MenoraPolicy.jsonl"
 "Evaluator":
   "metrics": ["Faithfulness","LLMContextRecall","LLMContextPrecisionWithReference"]
   "evaluator_llm": "gpt-4o-mini"
-  "output_path": "data/evaluation_datasets/needle_agent/client2_report2_tourAndCarePolicy_evaluation_results.json"
+  "output_path": "backend/data/evaluation_datasets/needle_agent/client3_report_MenoraPolicy_evaluation_results.json"

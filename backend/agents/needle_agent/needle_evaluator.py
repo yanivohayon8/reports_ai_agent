@@ -1,6 +1,6 @@
-from agents.needle_agent.needle_dataset_synthesizer import load_needle_dataset
+from backend.agents.needle_agent.needle_dataset_synthesizer import load_needle_dataset
 from pathlib import Path
-from agents.needle_agent.needle_agent import NeedleAgent
+from backend.agents.needle_agent.needle_agent import NeedleAgent
 from typing import List
 from ragas.metrics import (
     Faithfulness,
@@ -42,7 +42,7 @@ class NeedleEvaluator:
             agent_response = agent.answer(ground_truth_sample["question"])
             sample = {
                 "user_input": ground_truth_sample["question"],
-                "retrieved_contexts": agent_response["chunks_content"],
+                "retrieved_contexts": agent_response.get("chunks_content", []),
                 "response": agent_response["answer"],
                 "reference": ground_truth_sample["answer"]
             }
